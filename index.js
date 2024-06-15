@@ -1,5 +1,7 @@
 const express = require("express")
 require('dotenv').config();
+// Cài đặt cổng mà server sẽ lắng nghe
+const PORT = 3000;
 
 const database = require("./config/database");
 database.connect();
