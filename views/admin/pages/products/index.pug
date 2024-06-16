@@ -7,12 +7,15 @@ block main
     .card-header Bộ lọc và Tìm kiếm
     .card-body
       button(
-        class="btn btn-sm ml-1 btn-outline-success active"
+        class="btn btn-sm ml-1 btn-outline-success" 
+        button-status=""
       ) Tất cả
       button(
+        button-status="active"
         class="btn btn-sm ml-1 btn-outline-success"
       ) Hoạt động
       button(
+        button-status="inactive"
         class="btn btn-sm ml-1 btn-outline-success"
       ) Dừng hoạt động
 
