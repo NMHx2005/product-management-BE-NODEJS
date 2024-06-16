@@ -15,6 +15,7 @@ database.connect();
 // Import các route cho client từ file index.route.js trong thư mục routes/client.
 const routeClient = require("./routes/client/index.route");
 const routeAdmin = require("./routes/admin/index.route");
+const systemConfig = require("./config/system");
 
 // Khởi tạo một instance của Express và gán vào biến app.
 const app = express();
@@ -29,9 +30,16 @@ app.set("view engine", "pug");
 // Cấu hình Express để phục vụ các file tĩnh (như CSS, JavaScript, images) từ thư mục public.
 app.use(express.static('public'));
 
+
+// Tạo biến toàn cục cho file pug
+
+
 //  Gọi phương thức index() từ module route client đã import, truyền vào instance của Express (app) để định nghĩa các route cho client.
 routeClient.index(app);
 routeAdmin.index(app);
+
+// App Locals Variables
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Khởi động server và lắng nghe ở cổng được chỉ định bởi biến port. Khi server bắt đầu lắng nghe, nó sẽ in ra thông báo "Example app listening at http://localhost
 app.listen(port, () => {
