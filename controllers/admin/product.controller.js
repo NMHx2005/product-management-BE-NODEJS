@@ -6,7 +6,7 @@ module.exports.index = async (req, res) => {
     deleted: false
   });
 
-  console.log(products);
+  // console.log(products);
 
   res.render("admin/pages/products/index", {
     pageTitle: "Quản lý sản phẩm",
