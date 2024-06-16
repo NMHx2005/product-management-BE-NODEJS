@@ -20,6 +20,24 @@ module.exports.index = async (req, res) => {
   // Kết Thúc Tìm kiếm
 
 
+  // Tối ưu hóa phần Bộ lọc
+  const filterStatus = [
+    {
+      label: "Tất cả",
+      value: ""
+    },
+    {
+      label: "Hoạt động",
+      value: "active"
+    },
+    {
+      label: "Dừng hoạt động",
+      value: "inactive"
+    }
+  ];
+  // Tối ưu hóa phần Bộ lọc
+
+
 
   const products = await Product.find(find);
 
@@ -29,6 +47,7 @@ module.exports.index = async (req, res) => {
   res.render("admin/pages/products/index", {
     pageTitle: "Quản lý sản phẩm",
     products: products,
-    keyword: keyword
+    keyword: keyword,
+    filterStatus: filterStatus
   });
 }
