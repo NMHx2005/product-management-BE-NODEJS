@@ -26,8 +26,12 @@ if (listButtonStatus.length > 0) {
     });
 
     // Thêm class active mặc định
+
+    // Lấy ra xem url hiện tại status đang ở trạng thái nào
     const statusCurrent = url.searchParams.get("status") || "";
+    // Tìm button có trạng thái statusCurrent
     const buttonCurrent = document.querySelector(`[button-status="${statusCurrent}"]`);
+    // Nếu tìm thấy button thì thêm class active vào button đó
     if(buttonCurrent) {
         buttonCurrent.classList.add("active");
     }
