@@ -1,0 +1,32 @@
+mixin pagination(pagination)
+    nav
+        ul(class="pagination")
+            if(pagination.currentPage > 1)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=1
+                    ) <i class="fa-solid fa-paper-plane"></i>  
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.currentPage-1
+                    ) <i class="fa-solid fa-arrow-left"></i>  
+            
+            - for (var i = 1; i <= pagination.totalPage; i++)
+                li(class=(pagination.currentPage == i ? "page-item active" : "page-item"))
+                    button(
+                        class="page-link"
+                        button-pagination=i
+                    ) #{i}
+            if(pagination.currentPage < pagination.totalPage)
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.currentPage+1
+                    ) <i class="fa-solid fa-arrow-right"></i>
+                li(class="page-item")
+                    button(
+                        class="page-link"
+                        button-pagination=pagination.totalPage
+                    ) <i class="fa-regular fa-paper-plane"></i>
