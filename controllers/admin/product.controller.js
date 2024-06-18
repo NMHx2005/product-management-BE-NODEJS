@@ -2,7 +2,7 @@ const Product = require("../../model/product.model");
 const paginationHelper = require("../../helpers/pagination.helpers");
 
 
-  // [GET] /admin/products/
+// [GET] /admin/products/
 module.exports.index = async (req, res) => {
   const find = {
     deleted: false
@@ -64,3 +64,17 @@ module.exports.index = async (req, res) => {
     pagination: pagination
   });
 }
+
+
+// [GET] /admin/products/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+  const { id, statusChange } = req.params;
+
+  await Product.updateOne({
+    _id: id
+  }, {
+    status: statusChange
+  });
+
+  res.redirect('back');
+};
