@@ -107,3 +107,37 @@ if(buttonChangeStatus.length > 0) {
 };
 
 // End Button Change Status
+
+
+
+// Check Item
+const inputCheckAll = document.querySelector("input[name='checkAll']");
+if (inputCheckAll) {
+
+  // Lấy ra danh sách các Item
+  const listInputCheckItem = document.querySelectorAll("input[name='checkItem']");
+
+
+  // Bắt sự kiện click vào nút checkAll
+  inputCheckAll.addEventListener("click", () => {
+    listInputCheckItem.forEach(inputCheckItem => {
+      inputCheckItem.checked = inputCheckAll.checked;
+    });
+  });
+
+  // Bắt sự kiện click vào nút checkItem
+  listInputCheckItem.forEach(inputCheckItem => {
+    inputCheckItem.addEventListener("click", () => {
+      const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItem']:checked");
+
+      if(listInputCheckItemChecked.length == listInputCheckItem.length) {
+        inputCheckAll.checked = true;
+      } else {
+        inputCheckAll.checked = false;
+      }
+    });
+  });
+
+
+}
+// End Check Item
