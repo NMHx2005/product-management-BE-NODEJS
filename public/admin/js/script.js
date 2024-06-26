@@ -141,3 +141,50 @@ if (inputCheckAll) {
 
 }
 // End Check Item
+
+
+
+
+
+// // Box Actions
+const boxActions = document.querySelector("[box-actions]");
+if (boxActions) {
+  const button = boxActions.querySelector("button");
+
+  button.addEventListener("click", () => {
+    const select = boxActions.querySelector("select");
+    const status = select.value;
+
+    const listInputChecked = document.querySelectorAll("input[name='checkItem']:checked");
+
+   
+    const ids = [];
+    listInputChecked .forEach(input => {
+      ids.push(input.value);
+    });
+
+    if ((ids.length > 0) && status != "") {
+      const dataChangeMulti = {
+        ids: ids,
+        status: status,
+      };
+
+      fetch("/admin/products/change-multi", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataChangeMulti),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code == 200) {
+            window.location.reload();
+          }
+        });
+    } else {
+      alert("Vui lòng chọn ít nhất 1 sản phẩm và chọn trạng thái!");
+    }
+  });
+}
+// // End Box Actions

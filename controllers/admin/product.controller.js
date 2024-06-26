@@ -80,4 +80,20 @@ module.exports.changeStatus = async (req, res) => {
   res.json({
     code: 200
   });
-};
+}
+
+// [PATCH] /admin/products/change-multi
+module.exports.changeMulti = async (req, res) => {
+  const { ids, status } = req.body;
+
+  await Product.updateMany({
+    _id: ids
+  }, {
+    status: status
+  });
+
+  // res.redirect('back');
+  res.json({
+    code: 200
+  });
+}
