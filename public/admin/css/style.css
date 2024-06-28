@@ -47,3 +47,20 @@
     border-bottom: 1px solid #515151;
   }
   /* End Sider */
+
+
+   /* page trash  */
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+  }
+  .footer-content .icon-trash {
+    font-size: 24px;
+    cursor: pointer;
+    color: #282A36;
+  }
+  .footer-content .icon-trash:hover {
+    color: #515151;
+  }
+  /* End page trash  */

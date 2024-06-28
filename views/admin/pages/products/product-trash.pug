@@ -5,7 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 
 block main
-  h1(class="mb-4") Quản lý sản phẩm
+  h1(class="mb-4") Thùng Rác
 
   .card.mb-3
     .card-header Bộ lọc và Tìm kiếm
@@ -70,15 +70,19 @@ block main
                     button-change-status
                   ) Dừng hoạt động
               td
-                button(class="btn btn-warning btn-sm") Sửa
+                button(
+                  class="btn btn-warning btn-sm" 
+                  restore=`/${prefixAdmin}/trash/restoreItem/${item.id}`
+                ) Khôi Phục
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete=`/${prefixAdmin}/products/delete/${item.id}`
+                  button-deleted=`/${prefixAdmin}/trash/deleteItem/${item.id}`
                 ) Xóa
   div(class="footer-content")
     +pagination(pagination)
-    i(
-      class="fa-solid fa-trash-can icon-trash" 
-      title="Thùng Rác" 
-      link=`/${prefixAdmin}/trash`
-    )
+
+
+
+
+
+  script(src="/admin/js/script.trash.js") 

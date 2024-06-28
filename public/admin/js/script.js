@@ -198,8 +198,7 @@ const listButtonDelete = document.querySelectorAll("[button-delete]");
 if (listButtonDelete.length > 0) {
   listButtonDelete.forEach(button => {
     button.addEventListener("click", () => {
-      const link = button.getAttribute("[button-delete]")
-
+      const link = button.getAttribute("button-delete");
       fetch(link , {
         method: "PATCH"
       })
@@ -213,3 +212,15 @@ if (listButtonDelete.length > 0) {
   });
 }
 // Hết Xóa Bản Ghi
+
+
+// Đi sang trang trash
+const pagesTrash = document.querySelector(".icon-trash");
+if(pagesTrash) {
+  pagesTrash.addEventListener("click", () => {
+    const link = pagesTrash.getAttribute("link");
+
+    window.location.href = link;
+  });
+}
+// End Đi sang trang trash
