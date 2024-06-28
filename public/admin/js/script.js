@@ -190,3 +190,26 @@ if (boxActions) {
   });
 }
 // // End Box Actions
+
+
+
+// Xóa Bản Ghi
+const listButtonDelete = document.querySelectorAll("[button-delete]");
+if (listButtonDelete.length > 0) {
+  listButtonDelete.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-delete");
+
+      fetch(`/admin/products/delete/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+// Hết Xóa Bản Ghi
