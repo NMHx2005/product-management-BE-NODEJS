@@ -40,3 +40,12 @@ if (listButtonDeleted.length > 0) {
     });
 }
 // Hết Xóa Vĩnh Viễn bản ghi
+
+
+
+
+
+
+
+
+

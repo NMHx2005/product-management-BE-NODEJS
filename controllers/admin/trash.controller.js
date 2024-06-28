@@ -80,6 +80,8 @@ module.exports.restoreItem = async (req, res) => {
   });
 }
 
+
+
 // [DELETE] /admin/trash/deleteItem/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;

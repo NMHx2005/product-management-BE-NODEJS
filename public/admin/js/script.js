@@ -146,7 +146,7 @@ if (inputCheckAll) {
 
 
 
-// // Box Actions
+// Box Actions
 const boxActions = document.querySelector("[box-actions]");
 if (boxActions) {
   const button = boxActions.querySelector("button");
