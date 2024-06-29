@@ -102,6 +102,11 @@ module.exports.changeMulti = async (req, res) => {
         deleted: true
       });
       break;
+    case "delete-forever":
+      await Product.deleteMany({
+        _id: ids
+      });
+      break;
   }
 
 
