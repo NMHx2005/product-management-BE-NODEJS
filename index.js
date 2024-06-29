@@ -1,9 +1,19 @@
 // Import module Express vào biến express. Là một framework cho Nodejs, giúp xây dựng ứng dụng web và API một cách nhanh chóng.
 const express = require("express")
 
+
+
+
+
 // Import module dotnev và gọi phương thức config để có thể sử dụng các biến môi trường được định nghĩa trong file .env
 require('dotenv').config();
 const bodyParser = require('body-parser');
+
+const flash = require('express-flash')
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
+
 
 // Khai báo một hằng số PORT và gán giá trị 3000 cho nó. Đây là cổng mặc định mà server sẽ lắng nghe.
 const PORT = 3000;
@@ -22,6 +32,13 @@ const systemConfig = require("./config/system");
 const app = express();
 // Lấy giá trị của biến môi trường PORT và gán vào biến port. Nếu không có giá trị nào được set, server sẽ lắng nghe ở cổng được định nghĩa bởi hằng số PORT (3000).
 const port = process.env.PORT;
+
+
+// Flash
+app.use(cookieParser('HHKALKS'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+// End Flash
 
 
 // parse application/json
