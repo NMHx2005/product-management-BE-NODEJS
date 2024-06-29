@@ -1,4 +1,4 @@
-mixin box-actions(link, deleted)
+mixin box-actions(link, deleted, restoreAll)
     div(class="input-group" box-actions=link)
         select(class="custom-select")
           option(value='') Chọn hành động...
@@ -8,6 +8,8 @@ mixin box-actions(link, deleted)
             option(value='delete') Xóa
           else if deleted == "Xóa Vĩnh Viễn"
             option(value='delete-forever') Xóa Vĩnh Viễn
+          if restoreAll == "Khôi Phục"
+            option(value='restoreAll') Khôi Phục
         .input-group-append
           button(
             class="btn btn-outline-secondary"
