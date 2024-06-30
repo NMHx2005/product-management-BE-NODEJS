@@ -43,6 +43,8 @@ app.use(flash());
 
 // parse application/json
 app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Cấu hình thư mục chứa các file template view cho Express.
