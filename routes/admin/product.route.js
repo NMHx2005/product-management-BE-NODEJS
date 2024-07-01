@@ -4,6 +4,8 @@ const router = express.Router();
 
 const controller = require("../../controllers/admin/product.controller");
 
+const validate = require("../../validates/admin/product.validate");
+
 const storageMulterHelper = require("../../helpers/storageMulter.helper");
 
 const upload = multer({ storage: storageMulterHelper.storage });
@@ -23,6 +25,7 @@ router.get("/create", controller.create);
 router.post(
     "/create", 
     upload.single('thumbnail'), 
+    validate.createPost,
     controller.createPost
   );
 
