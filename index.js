@@ -51,12 +51,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Cấu hình thư mục chứa các file template view cho Express.
-app.set("views", "./views");
+app.set("views", `${__dirname}/views`);
 // Cấu hình Express để sử dụng Pug làm template engine.
 app.set("view engine", "pug");
 
 // Cấu hình Express để phục vụ các file tĩnh (như CSS, JavaScript, images) từ thư mục public.
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 
 
 // Tạo biến toàn cục cho file pug
