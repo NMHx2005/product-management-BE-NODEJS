@@ -282,3 +282,45 @@ if (uploadImage) {
 
 }
 // End Upload image
+
+
+
+// Sort (Sắp xếp theo các tiêu chí được chọn)
+const sort = document.querySelector("[sort]");
+if (sort) {
+  let url = new URL(window.location.href);
+
+  const select = sort.querySelector("[sort-select]");
+  select.addEventListener("change", () => {
+    const [ sortKey, sortValue] = select.value.split("-");
+
+    url.searchParams.set("sortKey", sortKey); 
+    url.searchParams.set("sortValue", sortValue);
+    
+    window.location.href = url.href;
+  });
+
+  // Thêm Selected cho option
+  const defaultSortKey = url.searchParams.get("sortKey");
+  const defaultSortValue = url.searchParams.get("sortValue");
+  if (defaultSortKey && defaultSortValue) {
+    const optionSelected = document.querySelector(`option[value="${defaultSortKey}-${defaultSortValue}"]`);
+    if (optionSelected) {
+      optionSelected.selected = true;
+    }
+  }
+
+
+  // Tính năng Clear
+  const clearSort = sort.querySelector("[sort-clear]");
+  if (clearSort) {
+    clearSort.addEventListener("click", () => {
+      url.searchParams.delete("sortKey");
+      url.searchParams.delete("sortValue");
+      
+      window.location.href = url.href;
+    });
+  }
+}
+
+// End Sort
