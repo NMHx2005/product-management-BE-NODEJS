@@ -27,7 +27,7 @@ database.connect();
 const routeClient = require("./routes/client/index.route");
 const routeAdmin = require("./routes/admin/index.route");
 const systemConfig = require("./config/system");
-
+const path = require('path');
 // Khởi tạo một instance của Express và gán vào biến app.
 const app = express();
 // Lấy giá trị của biến môi trường PORT và gán vào biến port. Nếu không có giá trị nào được set, server sẽ lắng nghe ở cổng được định nghĩa bởi hằng số PORT (3000).
@@ -35,6 +35,11 @@ const port = process.env.PORT;
 
 
 app.use(methodOverride('_method'));
+
+
+/* New Route to the TinyMCE Node module */
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 
 
 // Flash
