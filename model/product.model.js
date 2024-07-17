@@ -6,6 +6,7 @@ mongoose.plugin(slug);
 // Hàm để định nghĩa ra bộ khung của database. Dùng Schema để làm cho truyền được vào giá trị của một object
 const productSchema = new Schema({ 
     title: String,
+    product_category_id: String,
     description: String,
     price: Number,
     discountPercentage: Number,
