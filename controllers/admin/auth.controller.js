@@ -39,7 +39,14 @@ module.exports.loginPost = async (req, res) => {
 
   req.flash("success", "Đăng nhập thành công")
 
-
-  res.cookie("token", account.token);
+  // Cái này có tác dụng như cookie dùng để duy trì cái cái đăng nhập, và được lưu đăng nhập theo session và là đăng nhập theo phiên.
+  res.cookie("token", account.token); // https://expressjs.com/en/5x/api.html#res.cookie
   res.redirect(`/${systemConfig.prefixAdmin}/dashboard`);
+}
+
+// [GET] /admin/auth/logout
+module.exports.logout = async (req, res) => {
+    res.clearCookie("token");
+    req.flash("success", "Đăng xuất thành công!");
+    res.redirect(`/${systemConfig.prefixAdmin}/auth/login`);
 }
