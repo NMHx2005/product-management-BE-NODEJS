@@ -45,13 +45,21 @@ module.exports.index = async (req, res) => {
     ];
     // Tối ưu hóa phần Bộ lọc
 
-
-    // const records = await ProductCategory.find(find);
+    // Sắp xếp
+    const sort = {};
+    if(req.query.sortKey && req.query.sortValue) {
+      sort[req.query.sortKey] = req.query.sortValue;
+    } else {
+      sort.position = "desc";
+    }
+    // Hết Sắp xếp
+    
 
     const records = await ProductCategory
       .find(find)
       .limit(paginationTrash.limitItems)
-      .skip(paginationTrash.skip);
+      .skip(paginationTrash.skip)
+      .sort(sort);
 
     res.render("admin/pages/products-category/index", {
       pageTitle: "Trang Danh Mục Sản Phẩm",
@@ -222,3 +230,21 @@ module.exports.deleteItem = async (req, res) => {
       code: 200
     });
   }
+
+
+
+// [PATCH] /admin/product/change-position/:id
+module.exports.changePosition = async (req, res) => {
+  const id = req.params.id;
+  const position = req.body.position;
+
+  await ProductCategory.updateOne({
+    _id: id
+  }, {
+    position: position
+  });
+
+  res.json({
+    code: 200
+  });
+}

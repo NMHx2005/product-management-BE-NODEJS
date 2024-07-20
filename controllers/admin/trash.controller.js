@@ -51,7 +51,6 @@ module.exports.index = async (req, res) => {
     // Tối ưu hóa phần Bộ lọc
   
   
-  
     const products = await Product
       .find(find)
       .limit(pagination.limitItems)
@@ -209,6 +208,3 @@ module.exports.changeStatus = async (req, res) => {
     code: 200
   });
 }
-
-
-

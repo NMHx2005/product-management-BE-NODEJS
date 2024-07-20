@@ -17,6 +17,8 @@ router.get("/create", controller.create);
 
 router.patch("/delete/:id", controller.deleteItem);
 
+router.patch("/change-position/:id", controller.changePosition);
+
 router.post(
   "/create", 
   upload.single('thumbnail'),
