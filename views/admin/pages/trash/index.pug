@@ -7,6 +7,11 @@ include ../../mixins/box-actions.pug
 block main
     h1(class="mb-4") Thùng Rác
 
+    .card.mb-3
+        .card-header Hành động
+        .card-body
+            +box-actions(`/${prefixAdmin}/trash/change-multi`, "Xóa Vĩnh Viễn", "Khôi Phục")
+
 
     .accordion(id="accordionExample")
         .card
@@ -25,19 +30,6 @@ block main
                 data-parent="#accordionExample"
             )
                 .card-body
-                    .card.mb-3
-                        .card-header Bộ lọc và Tìm kiếm 
-                        .card-body
-                            .row
-                                .col-6
-                                    +filterStatus(filterStatus)
-                                .col-6  
-                                    +search(keyword)
-                    .card.mb-3
-                        .card-header Hành động
-                        .card-body
-                            +box-actions(`/${prefixAdmin}/products/change-multi`, "Xóa Vĩnh Viễn", "Khôi Phục")
-
                     .card.mb-3
                         .card-header Danh sách Sản Phẩm
                         .card-body
@@ -75,7 +67,7 @@ block main
                                             td
                                                 if(item.status === "active")
                                                     button(
-                                                        link=`/${prefixAdmin}/products/change-status/inactive/${item.id}` 
+                                                        link=`/${prefixAdmin}/trash/change-status/inactive/${item.id}` 
                                                         class="badge badge-success"
                                                         button-change-status
                                                     ) Hoạt động 
@@ -114,26 +106,13 @@ block main
             )
                 .card-body
                     .card.mb-3
-                        .card-header Bộ lọc và Tìm kiếm 
-                        .card-body
-                            .row
-                                .col-6
-                                    +filterStatus(filterStatus)
-                                .col-6
-                                    +search(keyword)
-                    .card.mb-3
-                        .card-header Hành động
-                        .card-body
-                            +box-actions(`/${prefixAdmin}/products/change-multi`, "Xóa Vĩnh Viễn", "Khôi Phục")
-
-                    .card.mb-3
                         .card-header Danh Mục Sản Phẩm
                         .card-body
                             table.table.table-hover.table-sm
                                 thead
                                     tr
                                         th
-                                            input(name="checkAll" type="checkbox")
+                                            input(name="checkAllProductCategory" type="checkbox")
                                         th STT
                                         th Hình ảnh
                                         th Tiêu đề
@@ -145,7 +124,7 @@ block main
                                         tr 
                                             td
                                                 input(
-                                                    name="checkItem" 
+                                                    name="checkItemProductCategory" 
                                                     type="checkbox"
                                                     value=item.id
                                                 )

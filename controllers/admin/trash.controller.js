@@ -74,12 +74,6 @@ module.exports.index = async (req, res) => {
 }
 
 
-
-
-
-
-
-
 // [PATCH] /admin/trash/restoreItem/:id
 module.exports.restoreItem = async (req, res) => {
   const id = req.params.id;
@@ -123,3 +117,98 @@ module.exports.deleteItem = async (req, res) => {
     code: 200
   });
 }
+
+
+
+// [PATCH] /admin/trash/change-multi
+module.exports.changeMulti = async (req, res) => {
+  const { ids, status } = req.body;
+
+  switch(status) {
+    case "active":
+    case "inactive":
+      await Product.updateMany({
+        _id: ids
+      }, {
+        status: status
+      });
+
+      await ProductCategory.updateMany({
+        _id: ids
+      }, {
+        status: status
+      });
+      break;
+    case "delete":
+      await Product.updateMany({
+        _id: ids
+      }, {
+        deleted: true
+      });
+
+      await ProductCategory.updateMany({
+        _id: ids
+      }, {
+        deleted: true
+      });
+      break;
+    case "delete-forever":
+      await Product.deleteMany({
+        _id: ids
+      });
+
+      await ProductCategory.deleteMany({
+        _id: ids
+      });
+      break;
+    case "restoreAll":
+      await Product.updateMany({
+        _id: ids
+      }, {
+        deleted: false
+      });
+
+      await ProductCategory.updateMany({
+        _id: ids
+      }, {
+        deleted: false
+      });
+      break;
+  }
+
+  req.flash("success", "Hoàn Thành");
+
+  // res.redirect('back');
+  res.json({
+    code: 200
+  });
+}
+
+
+
+// [PATCH] /admin/trash/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+  const { id, statusChange } = req.params;
+
+  await Product.updateOne({
+    _id: id
+  }, {
+    status: statusChange
+  });
+
+  await ProductCategory.updateOne({
+    _id: id
+  }, {
+    status: statusChange
+  });
+
+  req.flash('success', 'Cập nhật trạng thái thành công!');
+
+  // res.redirect('back');
+  res.json({
+    code: 200
+  });
+}
+
+
+
