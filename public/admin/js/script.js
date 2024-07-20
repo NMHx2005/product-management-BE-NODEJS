@@ -37,7 +37,6 @@ if (listButtonStatus.length > 0) {
 // End Button status 
 
 
-
 // From search
 const formSearch = document.querySelector("[form-search]");
 if(formSearch) {

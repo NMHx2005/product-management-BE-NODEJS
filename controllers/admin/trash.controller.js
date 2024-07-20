@@ -24,9 +24,12 @@ module.exports.index = async (req, res) => {
   
   
     // Tính năng phân trang
-    const pagination = await paginationHelper.pagination(req, find);
+    const paginationTrash = await paginationHelper.paginationTrash(req, find);
     // Kết thúc tính năng phân trang
-  
+    
+     // Tính năng phân trang
+     const pagination = await paginationHelper.pagination(req, find);
+     // Kết thúc tính năng phân trang
   
   
   
@@ -56,14 +59,15 @@ module.exports.index = async (req, res) => {
   
     const productCategory = await ProductCategory
       .find(find)
-      .limit(pagination.limitItems)
-      .skip(pagination.skip);
+      .limit(paginationTrash.limitItems)
+      .skip(paginationTrash.skip);
   
     res.render("admin/pages/trash", {
       pageTitle: "Thùng rác",
       products: products,
       keyword: keyword,
       productCategory: productCategory,
+      paginationTrash: paginationTrash,
       filterStatus: filterStatus,
       pagination: pagination
     });
@@ -86,6 +90,14 @@ module.exports.restoreItem = async (req, res) => {
     deleted: false
   });
 
+  await ProductCategory.updateOne({
+    _id: id
+  }, {
+    deleted: false
+  });
+
+  req.flash("success", "Khôi phục thành công");
+
   res.json({
     code: 200
   });
@@ -100,6 +112,12 @@ module.exports.deleteItem = async (req, res) => {
   await Product.deleteOne({
     _id: id
   });
+
+  await ProductCategory.deleteOne({
+    _id: id
+  });
+
+  req.flash("success", "Xóa thành công");
 
   res.json({
     code: 200

@@ -25,7 +25,7 @@ module.exports.index = async (req, res) => {
     // Kết Thúc Tìm kiếm
 
     // Tính năng phân trang
-    const pagination = await paginationHelper.pagination(req, find);
+    const paginationTrash = await paginationHelper.paginationTrash(req, find);
     // Kết thúc tính năng phân trang
 
     // Tối ưu hóa phần Bộ lọc
@@ -46,14 +46,19 @@ module.exports.index = async (req, res) => {
     // Tối ưu hóa phần Bộ lọc
 
 
-    const records = await ProductCategory.find(find);
+    // const records = await ProductCategory.find(find);
+
+    const records = await ProductCategory
+      .find(find)
+      .limit(paginationTrash.limitItems)
+      .skip(paginationTrash.skip);
 
     res.render("admin/pages/products-category/index", {
       pageTitle: "Trang Danh Mục Sản Phẩm",
       records: records,
       filterStatus: filterStatus,
       keyword: keyword,
-      pagination: pagination
+      paginationTrash: paginationTrash
     });
 }
 
