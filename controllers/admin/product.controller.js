@@ -63,7 +63,6 @@ module.exports.index = async (req, res) => {
     .skip(pagination.skip)
     .sort(sort);
 
-  // console.log(products);
 
   res.render("admin/pages/products/index", {
     pageTitle: "Quản lý sản phẩm",

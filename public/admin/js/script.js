@@ -1,6 +1,4 @@
 // Button status
-
-// Lấy ra được các nút trang thái
 const listButtonStatus = document.querySelectorAll("[button-status]");
 if (listButtonStatus.length > 0) {
     // Lấy ra link của trang hiện tại
