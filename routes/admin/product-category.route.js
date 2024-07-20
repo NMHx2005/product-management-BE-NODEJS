@@ -11,6 +11,8 @@ router.get("/", controller.index);
 
 router.patch("/change-status/:statusChange/:id", controller.changeStatus);
 
+router.patch("/change-multi", controller.changeMulti);
+
 router.get("/create", controller.create);
 
 router.post(

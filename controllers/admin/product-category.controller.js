@@ -156,4 +156,46 @@ module.exports.changeStatus = async (req, res) => {
     res.json({
       code: 200
     });
-  }
+}
+
+
+// [PATCH] /admin/products-category/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const { ids, status } = req.body;
+  
+    switch(status) {
+      case "active":
+      case "inactive":
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          status: status
+        });
+        break;
+      case "delete":
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: true
+        });
+        break;
+      case "delete-forever":
+        await ProductCategory.deleteMany({
+          _id: ids
+        });
+        break;
+      case "restoreAll":
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: false
+        });
+        break;
+    }
+  
+  
+    // res.redirect('back');
+    res.json({
+      code: 200
+    });
+}
