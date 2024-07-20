@@ -1,5 +1,6 @@
 const Product = require("../../model/product.model");
 const paginationHelper = require("../../helpers/pagination.helpers");
+const ProductCategory = require("../../model/product-category.model")
 
 // [GET] /admin/trash/
 module.exports.index = async (req, res) => {
@@ -53,17 +54,27 @@ module.exports.index = async (req, res) => {
       .limit(pagination.limitItems)
       .skip(pagination.skip);
   
-    // console.log(products);
+    const productCategory = await ProductCategory
+      .find(find)
+      .limit(pagination.limitItems)
+      .skip(pagination.skip);
   
-    res.render("admin/pages/products/product-trash", {
+    res.render("admin/pages/trash", {
       pageTitle: "Thùng rác",
       products: products,
       keyword: keyword,
+      productCategory: productCategory,
       filterStatus: filterStatus,
       pagination: pagination
     });
 }
-  
+
+
+
+
+
+
+
 
 // [PATCH] /admin/trash/restoreItem/:id
 module.exports.restoreItem = async (req, res) => {

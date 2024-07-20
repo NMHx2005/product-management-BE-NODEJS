@@ -7,7 +7,6 @@ router.get("/", controller.index);
 
 router.patch("/restoreItem/:id", controller.restoreItem);
 
-
 router.delete("/deleteItem/:id", controller.deleteItem);
 
 module.exports = router;
