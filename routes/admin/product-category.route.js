@@ -9,6 +9,8 @@ const upload = multer();
 
 router.get("/", controller.index);
 
+router.patch("/change-status/:statusChange/:id", controller.changeStatus);
+
 router.get("/create", controller.create);
 
 router.post(

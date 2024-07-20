@@ -137,3 +137,23 @@ module.exports.editPatch = async (req, res) => {
     res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
 
 }
+
+
+
+// [PATCH] /admin/products-category/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+    const { id, statusChange } = req.params;
+  
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
+  
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+  
+    // res.redirect('back');
+    res.json({
+      code: 200
+    });
+  }
