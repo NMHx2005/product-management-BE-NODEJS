@@ -15,6 +15,8 @@ router.patch("/change-multi", controller.changeMulti);
 
 router.get("/create", controller.create);
 
+router.patch("/delete/:id", controller.deleteItem);
+
 router.post(
   "/create", 
   upload.single('thumbnail'),

@@ -199,3 +199,21 @@ module.exports.changeMulti = async (req, res) => {
       code: 200
     });
 }
+
+
+// [PATCH] /admin/products-category/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+  
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      deleted: true
+    });
+  
+    req.flash('success', 'Xóa thành công!');
+  
+    res.json({
+      code: 200
+    });
+  }
