@@ -1,6 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
+include ../../mixins/pagination.pug
 
 block main
     h1(class="mb-4") Danh mục sản phẩm
@@ -90,3 +91,10 @@ block main
                                 button-delete
                                 data-id=item.id
                             ) Xóa
+    div(class="footer-content")
+        +pagination(pagination)
+        i(
+            class="fa-solid fa-trash-can icon-trash" 
+            title="Thùng Rác" 
+            link=`/${prefixAdmin}/trash`
+        )

@@ -1,6 +1,9 @@
 const ProductCategory = require("../../model/product-category.model");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
+const paginationHelper = require("../../helpers/pagination.helpers");
+
+
 
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
@@ -20,6 +23,10 @@ module.exports.index = async (req, res) => {
         keyword = req.query.keyword;
     }
     // Kết Thúc Tìm kiếm
+
+    // Tính năng phân trang
+    const pagination = await paginationHelper.pagination(req, find);
+    // Kết thúc tính năng phân trang
 
     // Tối ưu hóa phần Bộ lọc
     const filterStatus = [
@@ -45,7 +52,8 @@ module.exports.index = async (req, res) => {
       pageTitle: "Trang Danh Mục Sản Phẩm",
       records: records,
       filterStatus: filterStatus,
-      keyword: keyword
+      keyword: keyword,
+      pagination: pagination
     });
 }
 
