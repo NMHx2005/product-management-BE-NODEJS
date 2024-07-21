@@ -12,13 +12,13 @@ module.exports.index = async (req, res) => {
     });
 
     for (const record of records) {
-        const role = await Role.findOne({
-          _id: record.role_id,
-          deleted: false
-        });
-    
-        record.roleTitle = role.title;
-      }
+      const role = await Role.findOne({
+        _id: record.role_id,
+        deleted: false
+      });
+  
+      record.roleTitle = role.title;
+    }
 
     res.render("admin/pages/accounts/index", {
       pageTitle: "Tài khoản admin",
@@ -119,4 +119,38 @@ module.exports.changeStatus = async (req, res) => {
   res.json({
     code: 200
   });
+}
+
+
+// [GET] /admin/accounts/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const account = await Account.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if (!account) {
+      return res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+    }
+
+    const role = await Role.findOne({
+      _id: account.role_id,
+      deleted: false
+    });
+
+    if (role) {
+      account.roleTitle = role.title;
+    }
+
+    res.render("admin/pages/accounts/detail", {
+      pageTitle: "Chi tiết tài khoản",
+      account: account
+    });
+  } catch (error) {
+    console.error(error);
+    res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+  }
 }

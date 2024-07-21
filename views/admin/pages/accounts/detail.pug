@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+
+block main
+    if (account.roleTitle)
+        h1(class="mb-4") Vị trí: <b>#{account.roleTitle}</b>
+
+    if (account.avatar)
+        div(class="mb-4")
+            img(
+                src=account.avatar
+                class="rounded float-end" 
+                style="width: 400px"
+                alt="..."
+            )
+
+    
+
+    if (account.status)
+        div(class="mb-4")
+        span Trạng thái:
+        if (account.status === "active")
+            span(class="badge badge-success") Hoạt động
+        else
+            span(class="badge badge-danger") Dừng hoạt động
+    if (account.email)
+        div(class="mb-4") !{account.email}
+
