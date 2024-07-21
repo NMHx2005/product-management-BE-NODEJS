@@ -2,6 +2,7 @@ const Product = require("../../model/product.model");
 const paginationHelper = require("../../helpers/pagination.helpers");
 const ProductCategory = require("../../model/product-category.model");
 const Role = require("../../model/role.model");
+const Account = require("../../model/account.model");
 
 // [GET] /admin/trash/
 module.exports.index = async (req, res) => {
@@ -63,7 +64,20 @@ module.exports.index = async (req, res) => {
       .skip(paginationTrash.skip);
 
     const RoleFalse = await Role.find(find);
+    
+    const records = await Account.find(find);
+
+    for (const record of records) {
+      const role = await Role.findOne({
+        _id: record.role_id,
+        deleted: false
+      });
   
+      record.roleTitle = role.title;
+    }
+
+
+
     res.render("admin/pages/trash", {
       pageTitle: "Thùng rác",
       products: products,
@@ -72,7 +86,8 @@ module.exports.index = async (req, res) => {
       paginationTrash: paginationTrash,
       filterStatus: filterStatus,
       pagination: pagination,
-      RoleFalse: RoleFalse
+      RoleFalse: RoleFalse,
+      records: records
     });
 }
 
@@ -94,6 +109,12 @@ module.exports.restoreItem = async (req, res) => {
   });
 
   await Role.updateOne({
+    _id: id
+  }, {
+    deleted: false
+  });
+
+  await Account.updateOne({
     _id: id
   }, {
     deleted: false
@@ -124,6 +145,9 @@ module.exports.deleteItem = async (req, res) => {
     _id: id
   });
 
+  await Account.deleteOne({
+    _id: id
+  });
   
   req.flash("success", "Xóa thành công");
 

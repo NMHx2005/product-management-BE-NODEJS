@@ -208,8 +208,76 @@ block main
 
 
 
+        .card
+            .card-header(id="headingFour")
+                h2.mb-0
+                    button.btn.btn-link.btn-block.text-left.collapsed(
+                    type="button" 
+                    data-toggle="collapse" 
+                    data-target="#collapseFour" 
+                    aria-expanded="false" 
+                    aria-controls="collapseFour"
+                    ) Danh Sách Tài Khoản
 
-    
+            #collapseFour.collapse(
+                aria-labelledby="headingFour" 
+                data-parent="#accordionExample"
+            )
+                .card-body
+                .card.mb-3
+                    .card-header Danh Sách Tài Khoản
+                    .card-body
+                        table.table.table-hover.table-sm
+                            thead
+                                tr
+                                    th STT
+                                    th Avatar
+                                    th Họ tên
+                                    th Phân quyền
+                                    th Email
+                                    th Trạng thái
+                                    th Hành động
+
+                            tbody
+                                each item, index in records
+                                    tr 
+                                    td #{index+1}
+                                    td
+                                        img(
+                                            src=item.avatar
+                                            alt=item.fullName
+                                            width="100px"
+                                            height="auto"
+                                        )
+                                    td #{item.fullName}
+                                    td #{item.roleTitle}
+                                    td #{item.email}
+                                    td
+                                        if(item.status === "active")
+                                            button(
+                                                link=`/${prefixAdmin}/accounts/change-status/inactive/${item.id}` 
+                                                class="badge badge-success"
+                                                button-change-status
+                                                data-id=item.id
+                                            ) Hoạt động 
+                                        else 
+                                            button(
+                                                link=`/${prefixAdmin}/accounts/change-status/active/${item.id}` 
+                                                class="badge badge-danger"
+                                                data-id=item.id
+                                                button-change-status
+                                            ) Dừng hoạt động
+                                    td
+                                        button(
+                                            class="btn btn-warning btn-sm" 
+                                            restore=`/${prefixAdmin}/trash/restoreItem/${item.id}`
+                                        ) Khôi Phục
+                                        button(
+                                            class="btn btn-danger btn-sm ml-1"
+                                            button-deleted=`/${prefixAdmin}/trash/deleteItem/${item.id}`
+                                        ) Xóa
+
+                    
 
 
 
