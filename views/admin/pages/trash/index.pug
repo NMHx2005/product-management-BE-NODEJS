@@ -166,20 +166,51 @@ block main
         .card
             .card-header(id="headingThree")
                 h2.mb-0
-                    button.btn.btn-link.btn-block.text-left.collapsed(
-                        type="button" 
-                        data-toggle="collapse" 
-                        data-target="#collapseThree" 
-                        aria-expanded="false" 
-                        aria-controls="collapseThree"
-                    ) Danh Sách Tài Khoản
+                button.btn.btn-link.btn-block.text-left.collapsed(
+                    type="button" 
+                    data-toggle="collapse" 
+                    data-target="#collapseThree" 
+                    aria-expanded="false" 
+                    aria-controls="collapseThree"
+                ) Danh Sách Nhóm Quyền
 
             #collapseThree.collapse(
                 aria-labelledby="headingThree" 
                 data-parent="#accordionExample"
             )
                 .card-body
-                    | And lastly, the placeholder content for the third and final accordion panel. This panel is hidden by default.
+                .card.mb-3
+                    .card-header Danh Sách Nhóm Quyền
+                    .card-body
+                        table.table.table-hover.table-sm
+                            thead
+                            tr
+                                th STT
+                                th Nhóm Quyền
+                                th Mô tả
+                                th Hành động
+
+                            tbody
+                            each item, index in RoleFalse
+                                tr 
+                                td #{index + 1}
+                                td #{item.title}
+                                td #{item.description}
+                                td
+                                    button(
+                                        class="btn btn-warning btn-sm" 
+                                        restore=`/${prefixAdmin}/trash/restoreItem/${item.id}`
+                                    ) Khôi Phục
+                                    button(
+                                        class="btn btn-danger btn-sm ml-1"
+                                        button-deleted=`/${prefixAdmin}/trash/deleteItem/${item.id}`
+                                    ) Xóa
+
+
+
+
+    
+
 
 
     script(src="/admin/js/script.trash.js")

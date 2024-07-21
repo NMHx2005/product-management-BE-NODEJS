@@ -1,6 +1,7 @@
 const Product = require("../../model/product.model");
 const paginationHelper = require("../../helpers/pagination.helpers");
-const ProductCategory = require("../../model/product-category.model")
+const ProductCategory = require("../../model/product-category.model");
+const Role = require("../../model/role.model");
 
 // [GET] /admin/trash/
 module.exports.index = async (req, res) => {
@@ -60,6 +61,8 @@ module.exports.index = async (req, res) => {
       .find(find)
       .limit(paginationTrash.limitItems)
       .skip(paginationTrash.skip);
+
+    const RoleFalse = await Role.find(find);
   
     res.render("admin/pages/trash", {
       pageTitle: "Thùng rác",
@@ -68,7 +71,8 @@ module.exports.index = async (req, res) => {
       productCategory: productCategory,
       paginationTrash: paginationTrash,
       filterStatus: filterStatus,
-      pagination: pagination
+      pagination: pagination,
+      RoleFalse: RoleFalse
     });
 }
 
@@ -84,6 +88,12 @@ module.exports.restoreItem = async (req, res) => {
   });
 
   await ProductCategory.updateOne({
+    _id: id
+  }, {
+    deleted: false
+  });
+
+  await Role.updateOne({
     _id: id
   }, {
     deleted: false
@@ -110,6 +120,11 @@ module.exports.deleteItem = async (req, res) => {
     _id: id
   });
 
+  await Role.deleteOne({
+    _id: id
+  });
+
+  
   req.flash("success", "Xóa thành công");
 
   res.json({

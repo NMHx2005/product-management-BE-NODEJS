@@ -42,7 +42,14 @@ block main
                   ) Sửa
                   button(
                     class="btn btn-danger btn-sm ml-1"
+                    button-delete=`/${prefixAdmin}/roles/delete/${item.id}`
+                    data-id=item.id
                   ) Xóa
           else
             tr
               td(colspan="4" class="text-center") Chưa có nhóm quyền nào được tạo.
+  i(
+    class="fa-solid fa-trash-can icon-trash" 
+    title="Thùng Rác" 
+    link=`/${prefixAdmin}/trash`
+  )
