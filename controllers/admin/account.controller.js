@@ -44,6 +44,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
+  if(res.local.role.permissions.includes("account_")) {
     // Mã hóa password bằng md5 npm
     req.body.password = md5(req.body.password);
   
@@ -60,6 +61,9 @@ module.exports.createPost = async (req, res) => {
 
     // Sau khi hoàn thành thì quay lại trang nì
     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+  } else {
+    res.send(`403`);
+  }
 }
 
 
@@ -86,6 +90,7 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/accounts/edit/:id
 module.exports.editPatch = async (req, res) => {
+  if(res.local.role.permissions.includes("account_")) {
     const id = req.params.id;
     
     if(req.body.password == "") {
@@ -102,25 +107,32 @@ module.exports.editPatch = async (req, res) => {
     req.flash("success", "Chỉnh sửa tài khoản thành công!");
 
     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 // [PATCH] /admin/accounts/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-  const { id, statusChange } = req.params;
+  if(res.local.role.permissions.includes("account_")) {
+    const { id, statusChange } = req.params;
 
-  await Account.updateOne({
-    _id: id
-  }, {
-    status: statusChange
-  });
+    await Account.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
 
-  req.flash('success', 'Cập nhật trạng thái thành công!');
+    req.flash('success', 'Cập nhật trạng thái thành công!');
 
-  // res.redirect('back');
-  res.json({
-    code: 200
-  });
+    // res.redirect('back');
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
@@ -161,18 +173,22 @@ module.exports.detail = async (req, res) => {
 
 // [PATCH] /admin/accounts/delete/:id
 module.exports.delete = async (req, res) => {
-  const id = req.params.id;
+  if(res.local.role.permissions.includes("account_delete")) {
+    const id = req.params.id;
 
-  await Account.updateOne({
-    _id: id
-  }, {
-    deleted: true
-  });
+    await Account.updateOne({
+      _id: id
+    }, {
+      deleted: true
+    });
 
-  req.flash('success', 'Xóa thành công!');
+    req.flash('success', 'Xóa thành công!');
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
 

@@ -1,8 +1,9 @@
 extends ../../layouts/default.pug
 
 block main
-    if (record.title)
-        h1(class="mb-4") Nhóm Quyền: #{record.title}
-    if (record.description)
-        div(class="mb-1") Mô tả: <b>#{record.description}</b>
+    if(role.permissons.includes("roles_view"))
+        if (record.title)
+            h1(class="mb-4") Nhóm Quyền: #{record.title}
+        if (record.description)
+            div(class="mb-1") Mô tả: <b>#{record.description}</b>
 
