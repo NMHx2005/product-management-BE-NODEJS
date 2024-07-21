@@ -94,139 +94,152 @@ module.exports.index = async (req, res) => {
 
 // [PATCH] /admin/trash/restoreItem/:id
 module.exports.restoreItem = async (req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("trash_edit")) {
+    const id = req.params.id;
 
-  await Product.updateOne({
-    _id: id
-  }, {
-    deleted: false
-  });
+    await Product.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
 
-  await ProductCategory.updateOne({
-    _id: id
-  }, {
-    deleted: false
-  });
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
 
-  await Role.updateOne({
-    _id: id
-  }, {
-    deleted: false
-  });
+    await Role.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
 
-  await Account.updateOne({
-    _id: id
-  }, {
-    deleted: false
-  });
+    await Account.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
 
-  req.flash("success", "Khôi phục thành công");
+    req.flash("success", "Khôi phục thành công");
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 
 // [DELETE] /admin/trash/deleteItem/:id
 module.exports.deleteItem = async (req, res) => {
-  const id = req.params.id;
+  if(res.locals.role.permissions.includes("trash_delete")) {
+    const id = req.params.id;
 
-  await Product.deleteOne({
-    _id: id
-  });
+    await Product.deleteOne({
+      _id: id
+    });
 
-  await ProductCategory.deleteOne({
-    _id: id
-  });
+    await ProductCategory.deleteOne({
+      _id: id
+    });
 
-  await Role.deleteOne({
-    _id: id
-  });
+    await Role.deleteOne({
+      _id: id
+    });
 
-  await Account.deleteOne({
-    _id: id
-  });
-  
-  req.flash("success", "Xóa thành công");
+    await Account.deleteOne({
+      _id: id
+    });
+    
+    req.flash("success", "Xóa thành công");
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 
 // [PATCH] /admin/trash/change-multi
 module.exports.changeMulti = async (req, res) => {
-  const { ids, status } = req.body;
+  if(res.locals.role.permissions.includes("trash_edit")) {
+    const { ids, status } = req.body;
 
-  switch(status) {
-    case "active":
-    case "inactive":
-      await Product.updateMany({
-        _id: ids
-      }, {
-        status: status
-      });
+    switch(status) {
+      case "active":
+      case "inactive":
+        await Product.updateMany({
+          _id: ids
+        }, {
+          status: status
+        });
 
-      await ProductCategory.updateMany({
-        _id: ids
-      }, {
-        status: status
-      });
-      break;
-    case "delete":
-      await Product.updateMany({
-        _id: ids
-      }, {
-        deleted: true
-      });
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          status: status
+        });
+        break;
+      case "delete":
+        await Product.updateMany({
+          _id: ids
+        }, {
+          deleted: true
+        });
 
-      await ProductCategory.updateMany({
-        _id: ids
-      }, {
-        deleted: true
-      });
-      break;
-    case "delete-forever":
-      await Product.deleteMany({
-        _id: ids
-      });
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: true
+        });
+        break;
+      case "delete-forever":
+        await Product.deleteMany({
+          _id: ids
+        });
 
-      await ProductCategory.deleteMany({
-        _id: ids
-      });
-      break;
-    case "restoreAll":
-      await Product.updateMany({
-        _id: ids
-      }, {
-        deleted: false
-      });
+        await ProductCategory.deleteMany({
+          _id: ids
+        });
+        break;
+      case "restoreAll":
+        await Product.updateMany({
+          _id: ids
+        }, {
+          deleted: false
+        });
 
-      await ProductCategory.updateMany({
-        _id: ids
-      }, {
-        deleted: false
-      });
-      break;
+        await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: false
+        });
+        break;
+    }
+
+    req.flash("success", "Hoàn Thành");
+
+    // res.redirect('back');
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
   }
-
-  req.flash("success", "Hoàn Thành");
-
-  // res.redirect('back');
-  res.json({
-    code: 200
-  });
 }
 
 
 
 // [PATCH] /admin/trash/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-  const { id, statusChange } = req.params;
+  if(res.locals.role.permissions.includes("trash_edit")) {
+    const { id, statusChange } = req.params;
 
   await Product.updateOne({
     _id: id
@@ -246,4 +259,7 @@ module.exports.changeStatus = async (req, res) => {
   res.json({
     code: 200
   });
+  } else {
+    res.send(`403`);
+  }
 }
