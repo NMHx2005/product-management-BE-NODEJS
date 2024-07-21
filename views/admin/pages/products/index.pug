@@ -9,61 +9,65 @@ block main
   
 
 
-  h1(class="mb-4") Quản lý sản phẩm
+  if(role.permissions.includes("products_view"))
+    h1(class="mb-4") Quản lý sản phẩm
 
-  .card.mb-3
-    .card-header Bộ lọc và Tìm kiếm
-    .card-body
-      .row
-        .col-6
-          +filterStatus(filterStatus)
-        .col-6
-          +search(keyword)
-
-  .card.mb-3
-    .card-header Hành động
-    .card-body
-      +box-actions(`/${prefixAdmin}/products/change-multi`, "Xóa")
-
-  .card.mb-3
-    .card-header Sắp xếp
-    .card-body
-      .row
-        .col-5
-          div(sort)
-            select(
-              class="form-control"
-              name="sort"
-              sort-select
-            )
-              option(value="position-desc") Vị trí giảm dần
-              option(value="position-asc") Vị trí tăng dần
-              option(value="price-desc") Giá giảm dần
-              option(value="price-asc") Giá tăng dần
-              option(value="title-asc") Tiêu đề A - Z
-              option(value="title-desc") Tiêu đề Z - A
-
-            button(
-              class="btn btn-danger mt-2"
-              sort-clear
-            ) Clear
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filterStatus(filterStatus)
+          .col-6
+            +search(keyword)
 
 
-  .card.mb-3
-    .card-header Danh sách
-    .card-body
-      div(class="text-right mb-2")
-        a(
-          href=`/${prefixAdmin}/products/create`
-          class="btn btn-outline-success"
-        ) + Thêm mới
+    if(role.permissions.includes("products_edit"))
+      .card.mb-3
+        .card-header Hành động
+        .card-body
+          +box-actions(`/${prefixAdmin}/products/change-multi`, "Xóa")
+
+    .card.mb-3
+      .card-header Sắp xếp
+      .card-body
+        .row
+          .col-5
+            div(sort)
+              select(
+                class="form-control"
+                name="sort"
+                sort-select
+              )
+                option(value="position-desc") Vị trí giảm dần
+                option(value="position-asc") Vị trí tăng dần
+                option(value="price-desc") Giá giảm dần
+                option(value="price-asc") Giá tăng dần
+                option(value="title-asc") Tiêu đề A - Z
+                option(value="title-desc") Tiêu đề Z - A
+
+              button(
+                class="btn btn-danger mt-2"
+                sort-clear
+              ) Clear
+
+    .card.mb-3
+      .card-header Danh sách
+      if(role.permissions.includes("products_create"))
+        .card-body
+          div(class="text-right mb-2")
+            a(
+              href=`/${prefixAdmin}/products/create`
+              class="btn btn-outline-success"
+            ) + Thêm mới
 
         
       table.table.table-hover.table-sm
         thead
           tr
-            th
-              input(name="checkAll" type="checkbox")
+            if(role.permissions.includes("products_edit"))
+              th
+                input(name="checkAll" type="checkbox")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -75,12 +79,13 @@ block main
         tbody
           each item, index in products
             tr 
-              td
-                input(
-                  name="checkItem" 
-                  type="checkbox"
-                  value=item.id
-                )
+              if(role.permissions.includes("products_edit"))
+                td
+                  input(
+                    name="checkItem" 
+                    type="checkbox"
+                    value=item.id
+                  )
               td #{index + 1}
               td
                 img(
@@ -118,14 +123,16 @@ block main
                   class="btn btn-info btn-sm"
                   href=`/${prefixAdmin}/products/detail/${item.id}`
                 ) Chi tiết
-                a(
-                  class="btn btn-warning btn-sm ml-1"
-                  href=`/${prefixAdmin}/products/edit/${item.id}`
-                ) Sửa
-                button(
-                  class="btn btn-danger btn-sm ml-1"
-                  button-delete=`/${prefixAdmin}/products/delete/${item.id}`
-                ) Xóa
+                if(role.permissions.includes("products_edit")) 
+                  a(
+                    class="btn btn-warning btn-sm ml-1"
+                    href=`/${prefixAdmin}/products/edit/${item.id}`
+                  ) Sửa
+                if(role.permissions.includes("products_delete"))
+                  button(
+                    class="btn btn-danger btn-sm ml-1"
+                    button-delete=`/${prefixAdmin}/products/delete/${item.id}`
+                  ) Xóa
   div(class="footer-content")
     +pagination(pagination)
     i(

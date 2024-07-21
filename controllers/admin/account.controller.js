@@ -16,8 +16,10 @@ module.exports.index = async (req, res) => {
         _id: record.role_id,
         deleted: false
       });
-  
-      record.roleTitle = role.title;
+      
+      if(role.title) {
+        record.roleTitle = role.title;
+      }
     }
 
     res.render("admin/pages/accounts/index", {

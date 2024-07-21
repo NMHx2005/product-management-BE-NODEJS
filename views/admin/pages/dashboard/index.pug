@@ -2,3 +2,17 @@ extends ../../layouts/default.pug
 
 block main
   h1 Trang tổng quan
+  if(account.fullName)
+    h2 Tên tài khoản: #{account.fullName}
+  if(account.phone)
+    div Liên hệ: #{account.phone}
+  if(account.email)
+    div Email: #{account.email}
+  img(
+    src=account.avatar
+    width="150px"
+  )
+
+  h2 Vai trò: #{role.title}
+  div #{role.permissions}
+  
