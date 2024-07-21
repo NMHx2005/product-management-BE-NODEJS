@@ -22,10 +22,14 @@ module.exports.create = async (req, res) => {
   
   // [POST] /admin/roles/create
 module.exports.createPost = async (req, res) => {
+  if(res.local.role.permissions.includes("roles_create")) {
     const record = new Role(req.body);
     await record.save();
     req.flash("success", "Tạo mới nhóm quyền thành công!");
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+  } else {
+    res.send(`403`);
+  }
 };
 
 
@@ -51,21 +55,25 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
+  if(res.local.role.permissions.includes("roles_create")) {
     try {
-        const id = req.params.id;
-        const data = req.body;
+      const id = req.params.id;
+      const data = req.body;
 
-        await Role.updateOne({
-            _id: id,
-            deleted: false
-        }, data);
+      await Role.updateOne({
+          _id: id,
+          deleted: false
+      }, data);
 
-        req.flash("success", "Cập nhật thành công!");
-        res.redirect(`/${systemConfig.prefixAdmin}/roles`);
+      req.flash("success", "Cập nhật thành công!");
+      res.redirect(`/${systemConfig.prefixAdmin}/roles`);
     } catch(error) {
         req.flash("error", "Cập nhật nhóm quyền thất bại!");
         res.redirect(`/${systemConfig.prefixAdmin}/roles`);
     }
+  } else {
+    res.send(`403`);
+  }
 };
 
 
@@ -84,28 +92,28 @@ module.exports.permissions = async (req, res) => {
     });
   };
   
-  // [PATCH] /admin/roles/permissions
-  module.exports.permissionsPatch = async (req, res) => {
-    if(res.local.Role.permissions.includes("roles_permissions-edit")) {
-      const roles = req.body;
-  
-      for (const role of roles) {
-        await Role.updateOne({
-          _id: role.id,
-          deleted: false
-        }, {
-          permissions: role.permissions
-        });
-      }
-    
-      res.json({
-        code: 200,
-        message: "Cập nhật thành công!"
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  if(res.locals.role.permissions.includes("roles_permissions-edit")) {
+    const roles = req.body;
+
+    for (const role of roles) {
+      await Role.updateOne({
+        _id: role.id,
+        deleted: false
+      }, {
+        permissions: role.permissions
       });
-    } else {
-      res.send(`403`);
     }
-  };
+  
+    res.json({
+      code: 200,
+      message: "Cập nhật thành công!"
+    });
+  } else {
+    res.send(`403`);
+  }
+};
 
 
   // [GET] /admin/roles/detail/:id
@@ -136,17 +144,21 @@ module.exports.detail = async (req, res) => {
 
 // [PATCH] /admin/product/delete/:id
 module.exports.delete = async (req, res) => {
-  const id = req.params.id;
+  if(res.local.role.permissions.includes("roles_create")) {
+    const id = req.params.id;
 
-  await Role.updateOne({
-    _id: id
-  }, {
-    deleted: true
-  });
+    await Role.updateOne({
+      _id: id
+    }, {
+      deleted: true
+    });
 
-  req.flash('success', 'Xóa thành công!');
+    req.flash('success', 'Xóa thành công!');
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
