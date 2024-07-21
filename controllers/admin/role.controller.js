@@ -102,3 +102,27 @@ module.exports.permissions = async (req, res) => {
       message: "Cập nhật thành công!"
     });
   };
+
+
+  // [GET] /admin/roles/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const record = await Role.findOne({
+      _id: id,
+      deleted: false
+    });
+
+    if (record) {
+      res.render("admin/pages/roles/detail", {
+        pageTitle: "Chi tiết nhóm quyền",
+        record: record
+      });
+    } else {
+      res.redirect(`/${systemConfig.prefixAdmin}/role`);
+    }
+  } catch (error) {
+    res.redirect(`/${systemConfig.prefixAdmin}/role`);
+  }
+}
