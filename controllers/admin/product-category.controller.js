@@ -73,24 +73,25 @@ module.exports.index = async (req, res) => {
 
 // [GET] /admin/products-category/create
 module.exports.create = async (req, res) => {
-    const categories = await ProductCategory.find({
-        deleted: false
-    });
+  const categories = await ProductCategory.find({
+      deleted: false
+  });
 
-    const newCategories = createTreeHelper(categories);
+  const newCategories = createTreeHelper(categories);
 
-    res.render("admin/pages/products-category/create", {
-      pageTitle: "Thêm mới danh mục sản phẩm",
-      categories: newCategories
-    });
+  res.render("admin/pages/products-category/create", {
+    pageTitle: "Thêm mới danh mục sản phẩm",
+    categories: newCategories
+  });
 }
   
 
 
 // [POST] /admin/products-category/createPost
 module.exports.createPost = async (req, res) => {
+  if(res.locals.role.permissions.includes("products-category_create")) {
     if(req.body.position) {
-        req.body.position = parseInt(req.body.position);
+      req.body.position = parseInt(req.body.position);
     } else {
         const countCagegory = await ProductCategory.countDocuments({});
         req.body.position = countCagegory + 1;
@@ -100,6 +101,9 @@ module.exports.createPost = async (req, res) => {
     await newCategory.save();
 
     res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+  } else {
+    res.send(`403`);
+  };
 }
   
 
@@ -131,6 +135,7 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/products-category/edit/:id
 module.exports.editPatch = async (req, res) => {
+  if(res.locals.role.permissions.includes("products-category_edit")) {
     const id = req.params.id;
 
     if(req.body.position) {
@@ -148,13 +153,16 @@ module.exports.editPatch = async (req, res) => {
     req.flash("success", "Cập nhật danh mục thành công!");
 
     res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
-
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 
 // [PATCH] /admin/products-category/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
+  if(res.local.role.permissions.includes("products-category_edit")) {
     const { id, statusChange } = req.params;
   
     await ProductCategory.updateOne({
@@ -169,11 +177,15 @@ module.exports.changeStatus = async (req, res) => {
     res.json({
       code: 200
     });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 // [PATCH] /admin/products-category/change-multi
 module.exports.changeMulti = async (req, res) => {
+  if(res.locals.role.permissions.includes("products-category_edit")) {
     const { ids, status } = req.body;
   
     switch(status) {
@@ -211,11 +223,15 @@ module.exports.changeMulti = async (req, res) => {
     res.json({
       code: 200
     });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 // [PATCH] /admin/products-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
+  if(res.locals.role.permissions.includes("products-category_delete")) {
     const id = req.params.id;
   
     await ProductCategory.updateOne({
@@ -229,46 +245,57 @@ module.exports.deleteItem = async (req, res) => {
     res.json({
       code: 200
     });
+  } else {
+    res.send(`403`);
   }
+}
 
 
 
 // [PATCH] /admin/product/change-position/:id
 module.exports.changePosition = async (req, res) => {
-  const id = req.params.id;
-  const position = req.body.position;
+  if(res.locals.role.permissions.includes("products-category_edit")) {
+    const id = req.params.id;
+    const position = req.body.position;
 
-  await ProductCategory.updateOne({
-    _id: id
-  }, {
-    position: position
-  });
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      position: position
+    });
 
-  res.json({
-    code: 200
-  });
+    res.json({
+      code: 200
+    });
+  } else {
+    res.send(`403`);
+  }
 }
 
 
 // [GET] /admin/products-category/detail/:id
 module.exports.detail = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const productCategory = await ProductCategory.findOne({
-      _id: id,
-      deleted: false
-    });
-
-    if (productCategory) {
-      res.render("admin/pages/products-category/detail", {
-        pageTitle: "Chi tiết mục sản phẩm",
-        productCategory: productCategory
+  if(res.locals.role.permissions.includes("products-category_view")) {
+    try {
+      const id = req.params.id;
+  
+      const productCategory = await ProductCategory.findOne({
+        _id: id,
+        deleted: false
       });
-    } else {
+  
+      if (productCategory) {
+        res.render("admin/pages/products-category/detail", {
+          pageTitle: "Chi tiết mục sản phẩm",
+          productCategory: productCategory
+        });
+      } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+      }
+    } catch (error) {
       res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
     }
-  } catch (error) {
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+  } else {
+    res.send(`403`);
   }
 }
