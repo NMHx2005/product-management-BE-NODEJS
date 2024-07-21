@@ -20,6 +20,8 @@ router.post(
 
 router.get("/edit/:id", controller.edit);
 
+router.patch("/change-status/:statusChange/:id", controller.changeStatus);
+
 router.patch(
     "/edit/:id",
     upload.single('avatar'),
