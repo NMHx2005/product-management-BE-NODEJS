@@ -1,8 +1,11 @@
 const Product = require("../../model/product.model");
 const systemConfig = require("../../config/system");
+const Account = require("../../model/account.model");
 const paginationHelper = require("../../helpers/pagination.helpers");
 const ProductCategory = require("../../model/product-category.model");
 const createTreeHelper = require("../../helpers/createTree.helper");
+const moment = require("moment");
+
 // [GET] /admin/products/
 module.exports.index = async (req, res) => {
   const find = {
@@ -62,6 +65,19 @@ module.exports.index = async (req, res) => {
     .limit(pagination.limitItems)
     .skip(pagination.skip)
     .sort(sort);
+
+  for (const item of products) {
+    if(item.createdBy) {
+      const accountCreated = await Account.findOne({
+        _id: item.createdBy
+      });
+      item.createdByFullName = accountCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+
+    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+  }
 
 
   res.render("admin/pages/products/index", {
@@ -215,6 +231,9 @@ module.exports.createPost = async (req, res) => {
       const countProducts = await Product.countDocuments({});
       req.body.position = countProducts + 1;
     }
+
+    req.body.createdBy = res.locals.account.id;
+
     const newProduct = new Product(req.body);
     await newProduct.save();
 
