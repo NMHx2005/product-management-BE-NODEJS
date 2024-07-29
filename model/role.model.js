@@ -7,10 +7,13 @@ const roleSchema = new mongoose.Schema({
     type: Array,
     default: []
   },
+  createdBy: String,
+  updatedBy: String,
   deleted: {
     type: Boolean,
     default: false
   },
+  deletedBy: String
 }, {
   timestamps: true
 });

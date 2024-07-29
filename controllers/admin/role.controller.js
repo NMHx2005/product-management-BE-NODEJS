@@ -1,11 +1,41 @@
 const Role = require("../../model/role.model");
 const systemConfig = require("../../config/system");
+const moment = require("moment");
+const Account = require("../../model/account.model");
+
 
 // [GET] /admin/roles
 module.exports.index = async (req, res) => {
   const records = await Role.find({
     deleted: false
   });
+
+  for (const item of records) {
+    // Người tạo
+    if(item.createdBy) {
+      const accountCreated = await Account.findOne({
+        _id: item.createdBy
+      });
+      item.createdByFullName = accountCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+
+    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss");
+
+
+    // Người cập nhật
+    if(item.updatedBy) {
+      const accountUpdated = await Account.findOne({
+        _id: item.updatedBy
+      });
+      item.updatedByFullName = accountUpdated.fullName;
+    } else {
+      item.updatedByFullName = "";
+    }
+
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+  }
 
   res.render("admin/pages/roles/index", {
     pageTitle: "Nhóm quyền",
@@ -22,8 +52,9 @@ module.exports.create = async (req, res) => {
   
   // [POST] /admin/roles/create
 module.exports.createPost = async (req, res) => {
-  if(res.local.role.permissions.includes("roles_create")) {
+  if(res.locals.role.permissions.includes("roles_create")) {
     const record = new Role(req.body);
+    req.body.createdBy = res.locals.account.id;
     await record.save();
     req.flash("success", "Tạo mới nhóm quyền thành công!");
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
@@ -55,10 +86,12 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/roles/edit/:id
 module.exports.editPatch = async (req, res) => {
-  if(res.local.role.permissions.includes("roles_create")) {
+  if(res.locals.role.permissions.includes("roles_create")) {
     try {
       const id = req.params.id;
       const data = req.body;
+      
+      req.body.updatedBy = res.locals.account.id;
 
       await Role.updateOne({
           _id: id,
@@ -144,13 +177,14 @@ module.exports.detail = async (req, res) => {
 
 // [PATCH] /admin/product/delete/:id
 module.exports.delete = async (req, res) => {
-  if(res.local.role.permissions.includes("roles_create")) {
+  if(res.locals.role.permissions.includes("roles_create")) {
     const id = req.params.id;
 
     await Role.updateOne({
       _id: id
     }, {
-      deleted: true
+      deleted: true,
+      deletedBy: res.locals.account.id
     });
 
     req.flash('success', 'Xóa thành công!');

@@ -51,7 +51,7 @@ block main
             .card-body
                 .row
                     .col-8
-                    if(role.permissions.includes("product-category_create"))
+                    if(role.permissions.includes("products-category_create"))
                         .col-4.text-right
                             a(
                                 href=`/${prefixAdmin}/products-category/create`
@@ -71,6 +71,8 @@ block main
                             th Tiêu đề
                             th Vị trí
                             th Trạng thái
+                            th Tạo bởi
+                            th Cập nhật
                             th Hành động
 
                         tbody
@@ -116,6 +118,12 @@ block main
                                                 data-id=item.id
                                                 button-change-status
                                             ) Dừng hoạt động
+                                    td
+                                        div #{item.createdByFullName}
+                                        div #{item.createdAtFormat}
+                                    td
+                                        div #{item.updatedByFullName}
+                                        div #{item.updatedAtFormat}
                                     td
                                         a(
                                             class="btn btn-secondary btn-sm"

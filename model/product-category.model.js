@@ -12,10 +12,13 @@ const productCategorySchema = new mongoose.Schema({
   thumbnail: String,
   status: String,
   position: Number,
+  createdBy: String,
+  updatedBy: String,
   deleted: {
     type: Boolean,
     default: false
   },
+  deletedBy: String,
   slug: {
     type: String,
     slug: "title",

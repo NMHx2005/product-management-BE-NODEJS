@@ -3,6 +3,8 @@ const paginationHelper = require("../../helpers/pagination.helpers");
 const ProductCategory = require("../../model/product-category.model");
 const Role = require("../../model/role.model");
 const Account = require("../../model/account.model");
+const moment = require("moment");
+
 
 // [GET] /admin/trash/
 module.exports.index = async (req, res) => {
@@ -52,6 +54,9 @@ module.exports.index = async (req, res) => {
     ];
     // Tối ưu hóa phần Bộ lọc
   
+
+
+
   
     const products = await Product
       .find(find)
@@ -63,8 +68,51 @@ module.exports.index = async (req, res) => {
       .limit(paginationTrash.limitItems)
       .skip(paginationTrash.skip);
 
+    for (const item of products) {
+      // Người xóa
+      if(item.deletedBy) {
+        const accountDeleted = await Account.findOne({
+          _id: item.deletedBy
+        });
+        item.deletedByFullName = accountDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+  
+      item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+
+    for (const item of productCategory) {
+      // Người xóa
+      if(item.deletedBy) {
+        const accountDeleted = await Account.findOne({
+          _id: item.deletedBy
+        });
+        item.deletedByFullName = accountDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+  
+      item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+
     const RoleFalse = await Role.find(find);
-    
+
+    for (const item of RoleFalse) {
+      // Người xóa
+      if(item.deletedBy) {
+        const accountDeleted = await Account.findOne({
+          _id: item.deletedBy
+        });
+        item.deletedByFullName = accountDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+  
+      item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+
+
     const records = await Account.find(find);
 
     for (const record of records) {

@@ -2,7 +2,8 @@ const ProductCategory = require("../../model/product-category.model");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
 const paginationHelper = require("../../helpers/pagination.helpers");
-
+const moment = require("moment");
+const Account = require("../../model/account.model");
 
 
 // [GET] /admin/products-category
@@ -61,6 +62,34 @@ module.exports.index = async (req, res) => {
       .skip(paginationTrash.skip)
       .sort(sort);
 
+
+    for (const item of records) {
+      // Người tạo
+      if(item.createdBy) {
+        const accountCreated = await Account.findOne({
+          _id: item.createdBy
+        });
+        item.createdByFullName = accountCreated.fullName;
+      } else {
+        item.createdByFullName = "";
+      }
+  
+      item.createdAtFormat = moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss");
+  
+  
+      // Người cập nhật
+      if(item.updatedBy) {
+        const accountUpdated = await Account.findOne({
+          _id: item.updatedBy
+        });
+        item.updatedByFullName = accountUpdated.fullName;
+      } else {
+        item.updatedByFullName = "";
+      }
+  
+      item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+
     res.render("admin/pages/products-category/index", {
       pageTitle: "Trang Danh Mục Sản Phẩm",
       records: records,
@@ -96,6 +125,8 @@ module.exports.createPost = async (req, res) => {
         const countCagegory = await ProductCategory.countDocuments({});
         req.body.position = countCagegory + 1;
     }
+
+    req.body.createdBy = res.locals.account.id;
 
     const newCategory = new ProductCategory(req.body);
     await newCategory.save();
@@ -144,6 +175,8 @@ module.exports.editPatch = async (req, res) => {
         const countCagegory = await ProductCategory.countDocuments({});
         req.body.position = countCagegory + 1;
     }
+
+    req.body.updatedBy = res.locals.account.id;
 
     await ProductCategory.updateOne({
         _id: id,
@@ -237,7 +270,8 @@ module.exports.deleteItem = async (req, res) => {
     await ProductCategory.updateOne({
       _id: id
     }, {
-      deleted: true
+      deleted: true,
+      deletedBy: res.locals.account.id
     });
   
     req.flash('success', 'Xóa thành công!');

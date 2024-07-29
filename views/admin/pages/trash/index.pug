@@ -46,6 +46,7 @@ block main
                                                 th Tiêu đề
                                                 th Giá
                                                 th Trạng thái
+                                                th Xóa bởi
                                                 th Hành động
 
                                         tbody
@@ -81,6 +82,9 @@ block main
                                                                 class="badge badge-danger"
                                                                 button-change-status
                                                             ) Dừng hoạt động
+                                                    //- td
+                                                    //-     div #{item.deletedByFullName}
+                                                    //-     div #{item.deletedAtFormat}                                
                                                     td
                                                         if(role.permissions.includes("products_edit"))
                                                             button(
@@ -124,6 +128,7 @@ block main
                                                 th Hình ảnh
                                                 th Tiêu đề
                                                 th Trạng thái
+                                                th Xóa bởi
                                                 th Hành động
 
                                         tbody
@@ -158,6 +163,9 @@ block main
                                                                 class="badge badge-danger"
                                                                 button-change-status
                                                             ) Dừng hoạt động
+                                                    td
+                                                        div #{item.deletedByFullName}
+                                                        div #{item.deletedAtFormat}   
                                                     td  
                                                         if(role.permissions.includes("products-category_edit"))
                                                             button(
@@ -198,6 +206,7 @@ block main
                                         th STT
                                         th Nhóm Quyền
                                         th Mô tả
+                                        th Xóa bởi
                                         th Hành động
 
                                     tbody
@@ -206,6 +215,9 @@ block main
                                         td #{index + 1}
                                         td #{item.title}
                                         td #{item.description}
+                                        td
+                                            div #{item.deletedByFullName}
+                                            div #{item.deletedAtFormat}   
                                         td
                                             if(role.permissions.includes("roles_edit"))
                                                 button(
