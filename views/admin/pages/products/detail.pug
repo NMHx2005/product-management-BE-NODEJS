@@ -1,41 +1,51 @@
 extends ../../layouts/default.pug
 
 block main
-    if(role.permissions.includes("products_view"))
-        if (product.title)
-        h1(class="mb-4") #{product.title}
-
-        if (product.price)
-            div(class="mb-4") Giá: <b>#{product.price}$</b>
-
-        if (product.discountPercentage)
-            div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
-
-        if (product.stock)
-            div(class="mb-4") Còn lại: <b>#{product.stock}</b>
-
-        if (product.thumbnail)
-            div(class="mb-4")
-                img(
-                    src=product.thumbnail
-                    class="rounded float-end" 
-                    style="width: 400px"
-                    alt="..."
-                )
-
-        
-
-        if (product.status)
-            div(class="mb-4")
-            span Trạng thái:
-            if (product.status === "active")
-                span(class="badge badge-success") Hoạt động
-            else
-                span(class="badge badge-danger") Dừng hoạt động
-
-        if (product.position)
-            div(class="mb-1") Vị trí: <b>#{product.position}</b>
-
-        if (product.description)
-            div(class="mb-4") !{product.description}
-
+  if(role.permissions.includes("products_view"))
+    .container.mt-5
+      .row
+        .col-md-10.offset-md-1
+          .card.shadow-sm
+            .card-header.bg-primary.text-white.text-center
+              h1.mb-0 #{product.title}
+            .card-body
+              .row
+                .col-md-6
+                  if (product.thumbnail)
+                    .mb-4.text-center
+                      img(
+                        src=product.thumbnail
+                        class="img-fluid rounded shadow"
+                        alt=product.title
+                      )
+                .col-md-6
+                  if (product.price)
+                    .mb-3
+                      strong.text-muted Giá:
+                      span.text-primary.ml-2 #{product.price}$
+                  if (product.discountPercentage)
+                    .mb-3
+                      strong.text-muted Giảm giá:
+                      span.text-danger.ml-2 #{product.discountPercentage}%
+                  if (product.stock)
+                    .mb-3
+                      strong.text-muted Còn lại:
+                      span.text-success.ml-2 #{product.stock}
+                  if (product.status)
+                    .mb-3
+                      strong.text-muted Trạng thái:
+                      if (product.status === "active")
+                        span.badge.bg-success.ml-2 Hoạt động
+                      else
+                        span.badge.bg-danger.ml-2 Dừng hoạt động
+                  if (product.position)
+                    .mb-3
+                      strong.text-muted Vị trí:
+                      span.text-secondary.ml-2 #{product.position}
+              if (product.description)
+                .card-footer.bg-light
+                  .mt-4
+                    h5 Mô tả:
+                    p.mt-2 !{product.description}
+          .text-center.mt-4
+            a.btn.btn-outline-primary(href=`/${prefixAdmin}/products`) Quay lại danh sách

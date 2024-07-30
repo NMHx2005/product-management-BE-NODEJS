@@ -1,31 +1,38 @@
 extends ../../layouts/default.pug
 
 block main
-    if (productCategory.title)
-        h1(class="mb-4") #{productCategory.title}
-
-    if (productCategory.thumbnail)
-        div(class="mb-4")
-            img(
-                src=productCategory.thumbnail
-                class="rounded float-end" 
-                style="width: 400px"
-                alt="..."
-            )
-
-    
-
-    if (productCategory.status)
-        div(class="mb-4")
-        span Trạng thái:
-        if (productCategory.status === "active")
-            span(class="badge badge-success") Hoạt động
-        else
-            span(class="badge badge-danger") Dừng hoạt động
-
-    if (productCategory.position)
-        div(class="mb-1") Vị trí: <b>#{productCategory.position}</b>
-
-    if (productCategory.description)
-        div(class="mb-4") !{productCategory.description}
-
+  .container.mt-5
+    .row
+      .col-md-10.offset-md-1
+        .card.shadow-sm
+          .card-header.bg-primary.text-white.text-center
+            h1.mb-0 #{productCategory.title}
+          .card-body
+            .row
+              .col-md-6
+                if (productCategory.thumbnail)
+                  .mb-4.text-center
+                    img(
+                      src=productCategory.thumbnail
+                      class="img-fluid rounded shadow"
+                      alt=productCategory.title
+                    )
+              .col-md-6
+                if (productCategory.status)
+                  .mb-3
+                    strong.text-muted Trạng thái:
+                    if (productCategory.status === "active")
+                      span.badge.bg-success.ml-2 Hoạt động
+                    else
+                      span.badge.bg-danger.ml-2 Dừng hoạt động
+                if (productCategory.position)
+                  .mb-3
+                    strong.text-muted Vị trí:
+                    span.text-secondary.ml-2 #{productCategory.position}
+          if (productCategory.description)
+            .card-footer.bg-light
+              .mt-4
+                h5 Mô tả:
+                p.mt-2 !{productCategory.description}
+        .text-center.mt-4
+          a.btn.btn-outline-primary(href=`/${prefixAdmin}/products-category`) Quay lại danh sách

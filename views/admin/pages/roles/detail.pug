@@ -1,9 +1,16 @@
 extends ../../layouts/default.pug
 
 block main
-    if(role.permissons.includes("roles_view"))
-        if (record.title)
-            h1(class="mb-4") Nhóm Quyền: #{record.title}
-        if (record.description)
-            div(class="mb-1") Mô tả: <b>#{record.description}</b>
-
+  .container.mt-5
+    .row
+      .col-md-8.offset-md-2
+        .card.shadow-sm
+          .card-header.bg-primary.text-white.text-center
+            h1.mb-0 Nhóm Quyền: #{record.title}
+          .card-body
+            if (record.description)
+              .mb-4
+                h5 Mô tả:
+                p.text-muted.mt-2 #{record.description}
+        .text-center.mt-4
+          a.btn.btn-outline-primary(href=`/${prefixAdmin}/roles`) Quay lại danh sách

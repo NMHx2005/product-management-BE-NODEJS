@@ -252,3 +252,28 @@ module.exports.edit = async (req, res) => {
 }
   
   
+
+
+// [GET] /admin/articles/detail/:id
+module.exports.detail = async (req, res) => {
+    try {
+        const id = req.params.id;
+    
+        const article = await Article.findOne({
+          _id: id,
+          deleted: false
+        });
+    
+        if (article) {
+            res.render("admin/pages/articles/detail", {
+            pageTitle: "Chi tiết bài viết",
+            article: article
+        });
+    } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+    }
+    } catch (error) {
+        res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+    }
+}
+  
