@@ -123,3 +123,21 @@ module.exports.changeMulti = async (req, res) => {
         code: 200
     });
 }
+
+
+// [PATCH] /admin/articles/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+
+    await Article.updateOne({
+        _id: id
+    }, {
+        deleted: true
+    });
+
+    req.flash('success', 'Xóa sản phẩm thành công!');
+
+    res.json({
+        code: 200
+    });
+}
