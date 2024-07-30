@@ -24,6 +24,16 @@ router.patch("/change-position/:id", controller.changePosition);
 
 router.get("/create", controller.create);
 
+router.get("/edit/:id", controller.edit);
+
+router.patch(
+  "/edit/:id", 
+  upload.single('thumbnail'),
+  uploadCloud.uploadSingle,
+  validate.createPost,
+  controller.editPatch
+);
+
 router.post(
     "/create", 
     upload.single('thumbnail'), 

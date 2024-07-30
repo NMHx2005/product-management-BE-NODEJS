@@ -192,3 +192,63 @@ module.exports.createPost = async (req, res) => {
 
     res.redirect(`/${systemConfig.prefixAdmin}/articles`);
 }
+
+
+// [GET] /admin/products/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+      const id = req.params.id;
+  
+      const article = await Article.findOne({
+        _id: id,
+        deleted: false
+      });
+  
+      if (article) {
+        // const categories = await ProductCategory.find({
+        //   deleted: false
+        // });
+  
+        // const newCategories = createTreeHelper(categories);
+  
+        res.render("admin/pages/articles/edit", {
+          pageTitle: "Chỉnh sửa sản phẩm",
+          article: article,
+        //   categories: newCategories
+        });
+      } else {
+        res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+      }
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+    }
+  }
+  
+  
+  // [PATCH] /admin/products/edit/:id
+  module.exports.editPatch  = async (req, res) => {
+      try {
+        const id = req.params.id;
+    
+
+        if (req.body.position) {
+            req.body.position = parseInt(req.body.position);
+        } else {
+            const countArticles = await Article.countDocuments({});
+            req.body.position = countArticles + 1;
+        }
+
+        await Article.updateOne({
+          _id: id,
+          deleted: false
+        }, req.body);
+    
+        req.flash("success", "Cập nhật bài viết thành công!");
+    
+      } catch(error) {
+        req.flash('error', 'Id bài viết không hợp lệ!');
+      }
+      res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+}
+  
+  
