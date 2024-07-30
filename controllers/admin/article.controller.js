@@ -2,6 +2,7 @@ const Account = require("../../model/account.model");
 const md5 = require("md5");
 const systemConfig = require("../../config/system");
 const Article = require("../../model/articles.model")
+const paginationHelper = require("../../helpers/pagination.helpers");
 
 // [GET] /admin/pages/articles
 module.exports.index = async (req, res) => {
@@ -23,8 +24,9 @@ module.exports.index = async (req, res) => {
     // Kết Thúc Tìm kiếm
 
 
-
-    const articles = await Article.find(find);
+    // Tính năng phân trang
+    const paginationArticle = await paginationHelper.paginationArticle(req, find);
+    // Kết thúc tính năng phân trang
 
     // Tối ưu hóa phần Bộ lọc
     const filterStatus = [
@@ -42,10 +44,17 @@ module.exports.index = async (req, res) => {
         }
     ];
 
+    const articles = await Article
+        .find(find)
+        .limit(paginationArticle.limitItems)
+        .skip(paginationArticle.skip);
+
+
     res.render("admin/pages/articles/index", {
         pageTitle: "Quản lý bài viết",
         articles: articles,
         filterStatus: filterStatus,
-        keyword: keyword
+        keyword: keyword,
+        paginationArticle: paginationArticle
     });
 }
