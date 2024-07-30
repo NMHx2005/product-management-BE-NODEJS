@@ -44,13 +44,20 @@ module.exports.index = async (req, res) => {
         }
     ];
 
+    // Sắp xếp
+    const sort = {};
+    if(req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
+    } else {
+        sort.position = "desc";
+    }
+  // Hết Sắp xếp
+
     const articles = await Article
         .find(find)
         .limit(paginationArticle.limitItems)
         .skip(paginationArticle.skip)
-        .sort({
-            position: "desc"
-        })
+        .sort(sort);
 
 
     res.render("admin/pages/articles/index", {
