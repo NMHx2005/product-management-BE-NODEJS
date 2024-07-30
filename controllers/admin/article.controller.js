@@ -164,3 +164,31 @@ module.exports.changePosition = async (req, res) => {
         code: 200
     });
 }
+
+
+// [GET] /admin/articles/create
+module.exports.create = async (req, res) => {
+    res.render("admin/pages/articles/create", {
+      pageTitle: "Thêm mới bài viết"
+    });
+}
+
+
+// [POST] /admin/articles/createPost
+module.exports.createPost = async (req, res) => {
+    if (req.body.position) {
+        req.body.position = parseInt(req.body.position);
+    } else {
+        const countArticles = await Article.countDocuments({});
+        req.body.position = countArticles + 1;
+    }
+
+    req.body.deleted = req.body.deleted === 'true'; // Chuyển đổi deleted từ chuỗi thành boolean
+
+    const newArticle = new Article(req.body);
+    await newArticle.save();
+
+    req.flash("success", "Tạo mới bài viết thành công!");
+
+    res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+}
