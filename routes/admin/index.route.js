@@ -2,6 +2,7 @@ const dashboardRoute = require("./dashboard.route");
 const productsRoute = require("./product.route");
 const trashRoute = require("./trash.route");
 const rolesRoute = require("./role.route");
+const articlesRoute = require("./article.route");
 const accountsRoute = require("./account.route");
 const authRoute = require("./auth.route");
 const productsCategoryRoute = require("./product-category.route");
@@ -46,6 +47,12 @@ module.exports.index = (app) => {
         `${path}/accounts`, 
         authMiddleware.requireAuth,
         accountsRoute
+    );
+
+    app.use(
+        `${path}/articles`, 
+        authMiddleware.requireAuth,
+        articlesRoute
     );
 
     app.use(`${path}/auth`, authRoute);
