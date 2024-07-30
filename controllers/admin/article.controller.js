@@ -77,3 +77,49 @@ module.exports.changeStatus = async (req, res) => {
     });
 
 };
+
+
+// [PATCH] /admin/articles/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const { ids, status } = req.body;
+
+    switch(status) {
+        case "active":
+        case "inactive":
+            await Article.updateMany({
+                _id: ids
+            }, {
+                status: status
+            });
+            req.flash('success', 'Cập nhật trạng thái thành công!');
+            break;
+        case "delete":
+            await Article.updateMany({
+                _id: ids
+            }, {
+                deleted: true
+            });
+            req.flash('success', 'Xóa thành công!');
+            break;
+        case "delete-forever":
+            await Article.deleteMany({
+                _id: ids
+            });
+            req.flash('success', 'Áp dụng thành công!');
+            break;
+        case "restoreAll":
+            await Article.updateMany({
+                _id: ids
+            }, {
+                deleted: false
+            });
+            req.flash('success', 'Áp dụng thành công!');
+            break;
+    }
+
+
+    // res.redirect('back');
+    res.json({
+        code: 200
+    });
+}
