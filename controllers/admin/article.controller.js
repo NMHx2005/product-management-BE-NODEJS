@@ -58,3 +58,22 @@ module.exports.index = async (req, res) => {
         paginationArticle: paginationArticle
     });
 }
+
+
+// [PATCH] /admin/articles/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+    const { id, statusChange } = req.params;
+
+    await Article.updateOne({
+        _id: id
+    }, {
+        status: statusChange
+    });
+
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+
+    res.json({
+        code: 200
+    });
+
+};

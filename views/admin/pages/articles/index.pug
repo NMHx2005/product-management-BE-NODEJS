@@ -43,13 +43,13 @@ block main
                     td
                         if(item.status === "active")
                             button(
-                                link=`/${prefixAdmin}/products/change-status/inactive/${item.id}` 
+                                link=`/${prefixAdmin}/articles/change-status/inactive/${item.id}` 
                                 class="badge badge-success"
                                 button-change-status
                             ) Hoạt động 
                         else 
                             button(
-                                link=`/${prefixAdmin}/products/change-status/active/${item.id}` 
+                                link=`/${prefixAdmin}/articles/change-status/active/${item.id}` 
                                 class="badge badge-danger"
                                 button-change-status
                             ) Dừng hoạt động
