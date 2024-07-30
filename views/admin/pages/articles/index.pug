@@ -51,7 +51,15 @@ block main
                             height="auto"
                         )
                     td #{item.title}
-                    td #{item.position}
+                    td
+                        input(
+                            link=`/${prefixAdmin}/articles/change-position/${item.id}`
+                            type="number"
+                            name="position"
+                            value=item.position
+                            style="width: 60px"
+                            min="1"
+                        )
                     if item.status == "active"
                     td
                         if(item.status === "active")

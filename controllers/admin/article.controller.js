@@ -47,7 +47,10 @@ module.exports.index = async (req, res) => {
     const articles = await Article
         .find(find)
         .limit(paginationArticle.limitItems)
-        .skip(paginationArticle.skip);
+        .skip(paginationArticle.skip)
+        .sort({
+            position: "desc"
+        })
 
 
     res.render("admin/pages/articles/index", {
@@ -137,6 +140,26 @@ module.exports.deleteItem = async (req, res) => {
 
     req.flash('success', 'Xóa sản phẩm thành công!');
 
+    res.json({
+        code: 200
+    });
+}
+
+
+
+// [PATCH] /admin/artciles/change-position/:id
+module.exports.changePosition = async (req, res) => {
+    const id = req.params.id;
+    const position = req.body.position;
+  
+    await Article.updateOne({
+        _id: id
+    }, {
+        position: position
+    });
+
+    req.flash('success', 'Thay đổi vị trí thành công!');
+  
     res.json({
         code: 200
     });
