@@ -110,6 +110,71 @@ if (inputCheckAll) {
 // End Check Item
 
 
+// Check Item ArticleCategory
+const inputCheckAllArticlesCategory = document.querySelector("input[name='checkAllArticlesCategory']");
+if (inputCheckAllArticlesCategory) {
+
+  // Lấy ra danh sách các checkItemProductCategory
+  const listInputCheckItem = document.querySelectorAll("input[name='checkItemArticlesCategory']");
+
+
+  // Bắt sự kiện click vào nút inputCheckAllArticlesCategory
+  inputCheckAllArticlesCategory.addEventListener("click", () => {
+    listInputCheckItem.forEach(inputCheckItem => {
+      inputCheckItem.checked = inputCheckAllArticlesCategory.checked;
+    });
+  });
+
+  // Bắt sự kiện click vào nút checkItemArticleCategory
+  listInputCheckItem.forEach(inputCheckItem => {
+    inputCheckItem.addEventListener("click", () => {
+      const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItemArticleCategory']:checked");
+
+      if(listInputCheckItemChecked.length == listInputCheckItem.length) {
+        inputCheckAllArticlesCategory.checked = true;
+      } else {
+        inputCheckAllArticlesCategory.checked = false;
+      }
+    });
+  });
+}
+// End Check Item
+
+
+
+
+// Check Item Article
+const inputCheckAllArticles = document.querySelector("input[name='checkAllArticles']");
+if (inputCheckAllArticles) {
+
+  // Lấy ra danh sách các checkItemProductCategory
+  const listInputCheckItem = document.querySelectorAll("input[name='checkItemArticles']");
+
+
+  // Bắt sự kiện click vào nút checkAllProductCategory
+  inputCheckAllArticles.addEventListener("click", () => {
+    listInputCheckItem.forEach(inputCheckItem => {
+      inputCheckItem.checked = inputCheckAllArticles.checked;
+    });
+  });
+
+  // Bắt sự kiện click vào nút checkItemProductCategory
+  listInputCheckItem.forEach(inputCheckItem => {
+    inputCheckItem.addEventListener("click", () => {
+      const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItemProductCategory']:checked");
+
+      if(listInputCheckItemChecked.length == listInputCheckItem.length) {
+        inputCheckAllArticles.checked = true;
+      } else {
+        inputCheckAllArticles.checked = false;
+      }
+    });
+  });
+}
+// End Check Item Articles
+
+
+
 
 // Button Change Status
 const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
@@ -150,86 +215,7 @@ if(showAlert) {
 // End show-alert
 
 
-
-// // Box Actions
-// const boxActions = document.querySelector("[box-actions]");
-// if (boxActions) {
-//   const button = boxActions.querySelector("button");
-
-//   button.addEventListener("click", () => {
-//     const select = boxActions.querySelector("select");
-//     const status = select.value;
-
-//     const listInputChecked = document.querySelectorAll("input[name='checkItem']:checked");
-
-    
-//     const ids = [];
-//     if (listInputChecked.length > 0) {
-//       listInputChecked .forEach(input => {
-//         ids.push(input.value);
-//       });
-  
-//       if ((ids.length > 0) && status != "") {
-//         const dataChangeMulti = {
-//           ids: ids,
-//           status: status,
-//         };
-  
-//         const link = boxActions.getAttribute("box-actions");
-  
-//         fetch(link, {
-//           method: "PATCH",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           body: JSON.stringify(dataChangeMulti),
-//         })
-//           .then(res => res.json())
-//           .then(data => {
-//             if (data.code == 200) {
-//               window.location.reload();
-//             }
-//           });
-//       } else {
-//         alert("Vui lòng chọn ít nhất 1 sản phẩm và chọn trạng thái!");
-//       }
-//     } else {
-//       const listInputChecked = document.querySelectorAll("input[name='checkItemProductCategory']:checked");
-
-   
-//       if (listInputChecked.length > 0) {
-//         listInputChecked .forEach(input => {
-//           ids.push(input.value);
-//         });
-
-//         if ((ids.length > 0) && status != "") {
-//           const dataChangeMulti = {
-//             ids: ids,
-//             status: status,
-//           };
-
-//           const link = boxActions.getAttribute("box-actions");
-
-//           fetch(link, {
-//             method: "PATCH",
-//             headers: {
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(dataChangeMulti),
-//           })
-//             .then(res => res.json())
-//             .then(data => {
-//               if (data.code == 200) {
-//                 window.location.reload();
-//               }
-//             });
-//         } else {
-//           alert("Vui lòng chọn ít nhất 1 sản phẩm và chọn trạng thái!");
-//         }
-//       }
-//     }
-//   });
-// }
+// Box actions
 const boxActions = document.querySelector("[box-actions]");
 if (boxActions) {
   const button = boxActions.querySelector("button");

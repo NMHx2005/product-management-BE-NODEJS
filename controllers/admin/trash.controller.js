@@ -4,6 +4,8 @@ const ProductCategory = require("../../model/product-category.model");
 const Role = require("../../model/role.model");
 const Account = require("../../model/account.model");
 const moment = require("moment");
+const Article = require("../../model/articles.model");
+const ArticleCategory = require("../../model/articles-category.model");
 
 
 // [GET] /admin/trash/
@@ -31,11 +33,17 @@ module.exports.index = async (req, res) => {
     const paginationTrash = await paginationHelper.paginationTrash(req, find);
     // Kết thúc tính năng phân trang
     
+    // Tính năng phân trang
+    const pagination = await paginationHelper.pagination(req, find);
+    // Kết thúc tính năng phân trang
+    
      // Tính năng phân trang
-     const pagination = await paginationHelper.pagination(req, find);
-     // Kết thúc tính năng phân trang
+    const paginationArticles = await paginationHelper.paginationArticles(req, find);
+    // Kết thúc tính năng phân trang
   
-  
+    // Tính năng phân trang
+    const paginationArticle = await paginationHelper.paginationArticle(req, find);
+    // Kết thúc tính năng phân trang
   
     // Tối ưu hóa phần Bộ lọc
     const filterStatus = [
@@ -68,6 +76,16 @@ module.exports.index = async (req, res) => {
       .limit(paginationTrash.limitItems)
       .skip(paginationTrash.skip);
 
+    const articles = await Article
+      .find(find)
+      .limit(pagination.limitItems)
+      .skip(pagination.skip);
+  
+    const articleCategory = await ArticleCategory
+      .find(find)
+      .limit(paginationTrash.limitItems)
+      .skip(paginationTrash.skip);
+
     for (const item of products) {
       // Người xóa
       if(item.deletedBy) {
@@ -96,6 +114,33 @@ module.exports.index = async (req, res) => {
       item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
     }
 
+    for (const item of articles) {
+      // Người xóa
+      if(item.deletedBy) {
+        const accountDeleted = await Account.findOne({
+          _id: item.deletedBy
+        });
+        item.deletedByFullName = accountDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+  
+      item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+
+    for (const item of articleCategory) {
+      // Người xóa
+      if(item.deletedBy) {
+        const accountDeleted = await Account.findOne({
+          _id: item.deletedBy
+        });
+        item.deletedByFullName = accountDeleted.fullName;
+      } else {
+        item.deletedByFullName = "";
+      }
+  
+      item.deletedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
     const RoleFalse = await Role.find(find);
 
     for (const item of RoleFalse) {
@@ -130,7 +175,11 @@ module.exports.index = async (req, res) => {
       pageTitle: "Thùng rác",
       products: products,
       keyword: keyword,
+      articles: articles,
+      articlesCategory: articleCategory,
       productCategory: productCategory,
+      paginationArticles: paginationArticles,
+      paginationArticle: paginationArticle,
       paginationTrash: paginationTrash,
       filterStatus: filterStatus,
       pagination: pagination,
@@ -169,6 +218,19 @@ module.exports.restoreItem = async (req, res) => {
       deleted: false
     });
 
+    await Article.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
+
+    await ArticleCategory.updateOne({
+      _id: id
+    }, {
+      deleted: false
+    });
+
+
     req.flash("success", "Khôi phục thành công");
 
     res.json({
@@ -199,6 +261,14 @@ module.exports.deleteItem = async (req, res) => {
     });
 
     await Account.deleteOne({
+      _id: id
+    });
+
+    await Article.deleteOne({
+      _id: id
+    });
+
+    await ArticleCategory.deleteOne({
       _id: id
     });
     
@@ -233,6 +303,18 @@ module.exports.changeMulti = async (req, res) => {
         }, {
           status: status
         });
+
+        await Article.updateMany({
+          _id: ids
+        }, {
+          status: status
+        });
+
+        await ArticleCategory.updateMany({
+          _id: ids
+        }, {
+          status: status
+        });
         break;
       case "delete":
         await Product.updateMany({
@@ -246,6 +328,18 @@ module.exports.changeMulti = async (req, res) => {
         }, {
           deleted: true
         });
+
+        await Article.updateMany({
+          _id: ids
+        }, {
+          deleted: true
+        });
+
+        await ArticleCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: true
+        });
         break;
       case "delete-forever":
         await Product.deleteMany({
@@ -253,6 +347,14 @@ module.exports.changeMulti = async (req, res) => {
         });
 
         await ProductCategory.deleteMany({
+          _id: ids
+        });
+
+        await Article.deleteMany({
+          _id: ids
+        });
+
+        await ArticleCategory.deleteMany({
           _id: ids
         });
         break;
@@ -264,6 +366,18 @@ module.exports.changeMulti = async (req, res) => {
         });
 
         await ProductCategory.updateMany({
+          _id: ids
+        }, {
+          deleted: false
+        });
+
+        await Article.updateMany({
+          _id: ids
+        }, {
+          deleted: false
+        });
+
+        await ArticleCategory.updateMany({
           _id: ids
         }, {
           deleted: false
@@ -289,24 +403,37 @@ module.exports.changeStatus = async (req, res) => {
   if(res.locals.role.permissions.includes("trash_edit")) {
     const { id, statusChange } = req.params;
 
-  await Product.updateOne({
-    _id: id
-  }, {
-    status: statusChange
-  });
+    await Product.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
 
-  await ProductCategory.updateOne({
-    _id: id
-  }, {
-    status: statusChange
-  });
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
 
-  req.flash('success', 'Cập nhật trạng thái thành công!');
+    await Article.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
 
-  // res.redirect('back');
-  res.json({
-    code: 200
-  });
+    await ArticleCategory.updateOne({
+      _id: id
+    }, {
+      status: statusChange
+    });
+
+
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+
+    // res.redirect('back');
+    res.json({
+      code: 200
+    });
   } else {
     res.send(`403`);
   }
