@@ -71,8 +71,8 @@ block main
                             th Tiêu đề
                             th Vị trí
                             th Trạng thái
-                            //- th Tạo bởi
-                            //- th Cập nhật
+                            th Tạo bởi
+                            th Cập nhật
                             th Hành động
 
                         tbody
@@ -118,12 +118,12 @@ block main
                                                 data-id=item.id
                                                 button-change-status
                                             ) Dừng hoạt động
-                                    //- td
-                                    //-     div #{item.createdByFullName}
-                                    //-     div #{item.createdAtFormat}
-                                    //- td
-                                    //-     div #{item.updatedByFullName}
-                                    //-     div #{item.updatedAtFormat}
+                                    td
+                                        div #{item.createdByFullName}
+                                        div #{item.createdAtFormat}
+                                    td
+                                        div #{item.updatedByFullName}
+                                        div #{item.updatedAtFormat}
                                     td
                                         a(
                                             class="btn btn-secondary btn-sm"

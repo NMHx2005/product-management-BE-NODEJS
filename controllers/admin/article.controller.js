@@ -1,3 +1,4 @@
+const moment = require("moment");
 const Account = require("../../model/account.model");
 const md5 = require("md5");
 const systemConfig = require("../../config/system");
@@ -59,6 +60,35 @@ module.exports.index = async (req, res) => {
         .limit(paginationArticle.limitItems)
         .skip(paginationArticle.skip)
         .sort(sort);
+
+    
+    for (const item of articles) {
+        // Người tạo
+        if(item.createdBy) {
+            const accountCreated = await Account.findOne({
+            _id: item.createdBy
+            });
+            item.createdByFullName = accountCreated.fullName;
+        } else {
+            item.createdByFullName = "";
+        }
+    
+        item.createdAtFormat = moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss");
+    
+    
+        // Người cập nhật
+        if(item.updatedBy) {
+            const accountUpdated = await Account.findOne({
+            _id: item.updatedBy
+            });
+            item.updatedByFullName = accountUpdated.fullName;
+        } else {
+            item.updatedByFullName = "";
+        }
+    
+        item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
+    }
+        
 
 
     res.render("admin/pages/articles/index", {
