@@ -1,4 +1,4 @@
-const ProductCategory = require("../../model/product-category.model");
+const ArticleCategory = require("../../model/articles-category.model");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
 const paginationHelper = require("../../helpers/pagination.helpers");
@@ -6,7 +6,7 @@ const moment = require("moment");
 const Account = require("../../model/account.model");
 
 
-// [GET] /admin/products-category
+// [GET] /admin/articles-category
 module.exports.index = async (req, res) => {
     const find = {
         deleted: false
@@ -26,7 +26,7 @@ module.exports.index = async (req, res) => {
     // Kết Thúc Tìm kiếm
 
     // Tính năng phân trang
-    const paginationTrash = await paginationHelper.paginationTrash(req, find);
+    const paginationArticles = await paginationHelper.paginationArticles(req, find);
     // Kết thúc tính năng phân trang
 
     // Tối ưu hóa phần Bộ lọc
@@ -56,82 +56,58 @@ module.exports.index = async (req, res) => {
     // Hết Sắp xếp
     
 
-    const records = await ProductCategory
+    const records = await ArticleCategory
       .find(find)
-      .limit(paginationTrash.limitItems)
-      .skip(paginationTrash.skip)
+      .limit(paginationArticles.limitItems)
+      .skip(paginationArticles.skip)
       .sort(sort);
 
 
-    for (const item of records) {
-      // Người tạo
-      if(item.createdBy) {
-        const accountCreated = await Account.findOne({
-          _id: item.createdBy
-        });
-        item.createdByFullName = accountCreated.fullName;
-      } else {
-        item.createdByFullName = "";
-      }
-  
-      item.createdAtFormat = moment(item.createdAt).format("DD/MM/YYYY HH:mm:ss");
-  
-  
-      // Người cập nhật
-      if(item.updatedBy) {
-        const accountUpdated = await Account.findOne({
-          _id: item.updatedBy
-        });
-        item.updatedByFullName = accountUpdated.fullName;
-      } else {
-        item.updatedByFullName = "";
-      }
-  
-      item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YYYY HH:mm:ss");
-    }
 
-    res.render("admin/pages/products-category/index", {
+    res.render("admin/pages/articles-category/index", {
       pageTitle: "Trang Danh Mục Sản Phẩm",
       records: records,
       filterStatus: filterStatus,
       keyword: keyword,
-      paginationTrash: paginationTrash
+      paginationArticles: paginationArticles
     });
 }
 
 
-// [GET] /admin/products-category/create
+// [GET] /admin/articles-category/create
 module.exports.create = async (req, res) => {
-  const categories = await ProductCategory.find({
+  const categories = await ArticleCategory.find({
       deleted: false
   });
 
   const newCategories = createTreeHelper(categories);
 
-  res.render("admin/pages/products-category/create", {
+  res.render("admin/pages/articles-category/create", {
     pageTitle: "Thêm mới danh mục sản phẩm",
     categories: newCategories
   });
 }
-  
 
 
-// [POST] /admin/products-category/createPost
+
+// [POST] /admin/articles-category/createPost
 module.exports.createPost = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_create")) {
+  if(res.locals.role.permissions.includes("articles-category_create")) {
     if(req.body.position) {
       req.body.position = parseInt(req.body.position);
     } else {
-        const countCagegory = await ProductCategory.countDocuments({});
+        const countCagegory = await ArticleCategory.countDocuments({});
         req.body.position = countCagegory + 1;
     }
 
     req.body.createdBy = res.locals.account.id;
 
-    const newCategory = new ProductCategory(req.body);
+    const newCategory = new ArticleCategory(req.body);
     await newCategory.save();
 
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+    res.flash("success", "Tạo mới danh mục bài viết thành công");
+
+    res.redirect(`/${systemConfig.prefixAdmin}/articles-category`);
   } else {
     res.send(`403`);
   };
@@ -139,22 +115,22 @@ module.exports.createPost = async (req, res) => {
   
 
 
-// [GET] /admin/products-category/edit/:id
+// [GET] /admin/articles-category/edit/:id
 module.exports.edit = async (req, res) => {
     const id = req.params.id;
 
-    const category = await ProductCategory.findOne({
+    const category = await ArticleCategory.findOne({
         _id: id,
         deleted: false
     });
 
-    const categories  = await ProductCategory.find({
+    const categories  = await ArticleCategory.find({
         deleted: false
     });
 
     const newCategories = createTreeHelper(categories);
 
-    res.render("admin/pages/products-category/edit", {
+    res.render("admin/pages/articles-category/edit", {
       pageTitle: "Trang Danh Mục Sản Phẩm",
       categories: categories,
       category: category
@@ -164,28 +140,28 @@ module.exports.edit = async (req, res) => {
 
 
 
-// [PATCH] /admin/products-category/edit/:id
+// [PATCH] /admin/articles-category/edit/:id
 module.exports.editPatch = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_edit")) {
+  if(res.locals.role.permissions.includes("articles-category_edit")) {
     const id = req.params.id;
 
     if(req.body.position) {
         req.body.position = parseInt(req.body.position);
     } else {
-        const countCagegory = await ProductCategory.countDocuments({});
+        const countCagegory = await ArticleCategory.countDocuments({});
         req.body.position = countCagegory + 1;
     }
 
     req.body.updatedBy = res.locals.account.id;
 
-    await ProductCategory.updateOne({
+    await ArticleCategory.updateOne({
         _id: id,
         deleted: false
     }, req.body);
 
     req.flash("success", "Cập nhật danh mục thành công!");
 
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+    res.redirect(`/${systemConfig.prefixAdmin}/articles-category`);
   } else {
     res.send(`403`);
   }
@@ -193,12 +169,12 @@ module.exports.editPatch = async (req, res) => {
 
 
 
-// [PATCH] /admin/products-category/change-status/:statusChange/:id
+// [PATCH] /admin/articles-category/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_edit")) {
+  if(res.locals.role.permissions.includes("articles-category_edit")) {
     const { id, statusChange } = req.params;
   
-    await ProductCategory.updateOne({
+    await ArticleCategory.updateOne({
       _id: id
     }, {
       status: statusChange
@@ -216,34 +192,34 @@ module.exports.changeStatus = async (req, res) => {
 }
 
 
-// [PATCH] /admin/products-category/change-multi
+// [PATCH] /admin/articles-category/change-multi
 module.exports.changeMulti = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_edit")) {
+  if(res.locals.role.permissions.includes("articles-category_edit")) {
     const { ids, status } = req.body;
   
     switch(status) {
       case "active":
       case "inactive":
-        await ProductCategory.updateMany({
+        await ArticleCategory.updateMany({
           _id: ids
         }, {
           status: status
         });
         break;
       case "delete":
-        await ProductCategory.updateMany({
+        await ArticleCategory.updateMany({
           _id: ids
         }, {
           deleted: true
         });
         break;
       case "delete-forever":
-        await ProductCategory.deleteMany({
+        await ArticleCategory.deleteMany({
           _id: ids
         });
         break;
       case "restoreAll":
-        await ProductCategory.updateMany({
+        await ArticleCategory.updateMany({
           _id: ids
         }, {
           deleted: false
@@ -262,12 +238,12 @@ module.exports.changeMulti = async (req, res) => {
 }
 
 
-// [PATCH] /admin/products-category/delete/:id
+// [PATCH] /admin/articles-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_delete")) {
+  if(res.locals.role.permissions.includes("articles-category_delete")) {
     const id = req.params.id;
   
-    await ProductCategory.updateOne({
+    await ArticleCategory.updateOne({
       _id: id
     }, {
       deleted: true,
@@ -286,13 +262,13 @@ module.exports.deleteItem = async (req, res) => {
 
 
 
-// [PATCH] /admin/product/change-position/:id
+// [PATCH] /admin/articles/change-position/:id
 module.exports.changePosition = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_edit")) {
+  if(res.locals.role.permissions.includes("articles-category_edit")) {
     const id = req.params.id;
     const position = req.body.position;
 
-    await ProductCategory.updateOne({
+    await ArticleCategory.updateOne({
       _id: id
     }, {
       position: position
@@ -307,27 +283,27 @@ module.exports.changePosition = async (req, res) => {
 }
 
 
-// [GET] /admin/products-category/detail/:id
+// [GET] /admin/articles-category/detail/:id
 module.exports.detail = async (req, res) => {
-  if(res.locals.role.permissions.includes("products-category_view")) {
+  if(res.locals.role.permissions.includes("articles-category_view")) {
     try {
       const id = req.params.id;
   
-      const productCategory = await ProductCategory.findOne({
+      const articleCategory = await ArticleCategory.findOne({
         _id: id,
         deleted: false
       });
   
-      if (productCategory) {
-        res.render("admin/pages/products-category/detail", {
+      if (articleCategory) {
+        res.render("admin/pages/articles-category/detail", {
           pageTitle: "Chi tiết mục sản phẩm",
-          productCategory: productCategory
+          articleCategory: articleCategory
         });
       } else {
-        res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+        res.redirect(`/${systemConfig.prefixAdmin}/articles-category`);
       }
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`/${systemConfig.prefixAdmin}/articles-category`);
     }
   } else {
     res.send(`403`);

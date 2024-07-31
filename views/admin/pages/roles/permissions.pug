@@ -109,6 +109,98 @@ block main
                   data-name="products_delete"
                   checked=(item.permissions.includes("products_delete") ? true : false)
                 )
+          
+          // Danh sách bài viết
+          tr
+            td(colspan="4")
+              b Danh sách bài viết
+          tr
+            td Xem
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id 
+                  data-name="articles_view"
+                  checked=(item.permissions.includes("articles_view") ? true : false)
+                )
+          
+          tr
+            td Thêm mới
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles_create"
+                  checked=(item.permissions.includes("articles_create") ? true : false)
+                )
+          tr
+            td Chỉnh sửa
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles_edit"
+                  checked=(item.permissions.includes("articles_edit") ? true : false)
+                )
+          tr
+            td Xóa
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles_delete"
+                  checked=(item.permissions.includes("articles_delete") ? true : false)
+                )
+
+          // Danh mục bài viết
+          tr
+            td(colspan="4")
+              b Danh mục bài viết
+          tr
+            td Xem
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id 
+                  data-name="articles-category_view"
+                  checked=(item.permissions.includes("articles-category_view") ? true : false)
+                )
+          
+          tr
+            td Thêm mới
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles-category_create"
+                  checked=(item.permissions.includes("articles-category_create") ? true : false)
+                )
+          tr
+            td Chỉnh sửa
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles-category_edit"
+                  checked=(item.permissions.includes("articles-category_edit") ? true : false)
+                )
+          tr
+            td Xóa
+            each item in records
+              td(class="text-center")
+                input(
+                  type="checkbox" 
+                  data-id=item.id
+                  data-name="articles-category_delete"
+                  checked=(item.permissions.includes("articles-category_delete") ? true : false)
+                )
 
           // Phân Quyền
           tr

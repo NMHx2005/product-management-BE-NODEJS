@@ -1,0 +1,39 @@
+extends ../../layouts/default.pug
+
+block main
+    if(role.permissions.includes("articles-category_view"))
+    .container.mt-5
+        .row
+            .col-md-10.offset-md-1
+                .card.shadow-sm
+                    .card-header.bg-primary.text-white.text-center
+                        h1.mb-0 #{articleCategory.title}
+                    .card-body
+                        .row
+                            .col-md-6
+                                if (articleCategory.thumbnail)
+                                    .mb-4.text-center
+                                        img(
+                                            src=articleCategory.thumbnail
+                                            class="img-fluid rounded shadow"
+                                            alt=articleCategory.title
+                                        )
+                            .col-md-6
+                                if (articleCategory.status)
+                                    .mb-3
+                                        strong.text-muted Trạng thái:
+                                        if (articleCategory.status === "active")
+                                            span.badge.bg-success.ml-2 Hoạt động
+                                        else
+                                            span.badge.bg-danger.ml-2 Dừng hoạt động
+                                if (articleCategory.position)
+                                    .mb-3
+                                        strong.text-muted Vị trí:
+                                        span.text-secondary.ml-2 #{articleCategory.position}
+                    if (articleCategory.description)
+                        .card-footer.bg-light.mt-4
+                            h5 Mô tả:
+                            p.mt-2 !{articleCategory.description}
+                .text-center.mt-4
+                    a.btn.btn-outline-primary(href=`/${prefixAdmin}/articles-category`) Quay lại danh sách
+

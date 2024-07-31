@@ -3,6 +3,7 @@ const productsRoute = require("./product.route");
 const trashRoute = require("./trash.route");
 const rolesRoute = require("./role.route");
 const articlesRoute = require("./article.route");
+const articlesCategoryRoute = require("./article-category.route");
 const accountsRoute = require("./account.route");
 const authRoute = require("./auth.route");
 const productsCategoryRoute = require("./product-category.route");
@@ -53,6 +54,12 @@ module.exports.index = (app) => {
         `${path}/articles`, 
         authMiddleware.requireAuth,
         articlesRoute
+    );
+
+    app.use(
+        `${path}/articles-category`,
+        authMiddleware.requireAuth, 
+        articlesCategoryRoute
     );
 
     app.use(`${path}/auth`, authRoute);

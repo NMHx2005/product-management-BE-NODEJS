@@ -9,10 +9,12 @@
       if(role.permissions.includes("products-category_view"))
         li
           a(href=`/${prefixAdmin}/products-category`) Danh Mục Sản phẩm
-      li 
-        a(href=`/${prefixAdmin}/articles`) Danh Sách Bài Viết
-      li 
-        a(href=`/${prefixAdmin}/articles-category`) Danh Mục Bài Viết
+      if(role.permissions.includes("articles_view"))
+        li 
+          a(href=`/${prefixAdmin}/articles`) Danh Sách Bài Viết
+      if(role.permissions.includes("articles-category_view"))
+        li 
+          a(href=`/${prefixAdmin}/articles-category`) Danh Mục Bài Viết
       if(role.permissions.includes("roles_view"))
         li
           a(href=`/${prefixAdmin}/roles`) Nhóm quyền

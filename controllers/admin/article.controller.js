@@ -3,6 +3,7 @@ const md5 = require("md5");
 const systemConfig = require("../../config/system");
 const Article = require("../../model/articles.model")
 const paginationHelper = require("../../helpers/pagination.helpers");
+const ArticleCategory = require("../../model/articles-category.model");
 
 // [GET] /admin/pages/articles
 module.exports.index = async (req, res) => {
@@ -72,104 +73,119 @@ module.exports.index = async (req, res) => {
 
 // [PATCH] /admin/articles/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-    const { id, statusChange } = req.params;
+    if(res.locals.role.permissions.includes("articles_edit")) {
+        const { id, statusChange } = req.params;
 
-    await Article.updateOne({
-        _id: id
-    }, {
-        status: statusChange
-    });
+        await Article.updateOne({
+            _id: id
+        }, {
+            status: statusChange
+        });
 
-    req.flash('success', 'Cập nhật trạng thái thành công!');
+        req.flash('success', 'Cập nhật trạng thái thành công!');
 
-    res.json({
-        code: 200
-    });
-
+        res.json({
+            code: 200
+        });
+    } else {
+        res.send(`403`);
+    }
 };
 
 
 // [PATCH] /admin/articles/change-multi
 module.exports.changeMulti = async (req, res) => {
-    const { ids, status } = req.body;
+    if(res.locals.role.permissions.includes("articles_edit")) {
+        const { ids, status } = req.body;
 
-    switch(status) {
-        case "active":
-        case "inactive":
-            await Article.updateMany({
-                _id: ids
-            }, {
-                status: status
-            });
-            req.flash('success', 'Cập nhật trạng thái thành công!');
-            break;
-        case "delete":
-            await Article.updateMany({
-                _id: ids
-            }, {
-                deleted: true
-            });
-            req.flash('success', 'Xóa thành công!');
-            break;
-        case "delete-forever":
-            await Article.deleteMany({
-                _id: ids
-            });
-            req.flash('success', 'Áp dụng thành công!');
-            break;
-        case "restoreAll":
-            await Article.updateMany({
-                _id: ids
-            }, {
-                deleted: false
-            });
-            req.flash('success', 'Áp dụng thành công!');
-            break;
+        switch(status) {
+            case "active":
+            case "inactive":
+                await Article.updateMany({
+                    _id: ids
+                }, {
+                    status: status
+                });
+                req.flash('success', 'Cập nhật trạng thái thành công!');
+                break;
+            case "delete":
+                await Article.updateMany({
+                    _id: ids
+                }, {
+                    deleted: true
+                });
+                req.flash('success', 'Xóa thành công!');
+                break;
+            case "delete-forever":
+                await Article.deleteMany({
+                    _id: ids
+                });
+                req.flash('success', 'Áp dụng thành công!');
+                break;
+            case "restoreAll":
+                await Article.updateMany({
+                    _id: ids
+                }, {
+                    deleted: false
+                });
+                req.flash('success', 'Áp dụng thành công!');
+                break;
+        }
+
+
+        // res.redirect('back');
+        res.json({
+            code: 200
+        });
+    } else {
+        res.send(`403`);
     }
-
-
-    // res.redirect('back');
-    res.json({
-        code: 200
-    });
 }
 
 
 // [PATCH] /admin/articles/delete/:id
 module.exports.deleteItem = async (req, res) => {
-    const id = req.params.id;
+    if(res.locals.role.permissions.includes("articles_delete")) {
+        const id = req.params.id;
 
-    await Article.updateOne({
-        _id: id
-    }, {
-        deleted: true
-    });
+        await Article.updateOne({
+            _id: id
+        }, {
+            deleted: true
+        });
 
-    req.flash('success', 'Xóa sản phẩm thành công!');
+        req.flash('success', 'Xóa sản phẩm thành công!');
 
-    res.json({
-        code: 200
-    });
+        res.json({
+            code: 200
+        });
+    } else {
+        res.send(`403`);
+    }
 }
 
 
 
 // [PATCH] /admin/artciles/change-position/:id
 module.exports.changePosition = async (req, res) => {
-    const id = req.params.id;
-    const position = req.body.position;
-  
-    await Article.updateOne({
-        _id: id
-    }, {
-        position: position
-    });
+    if(res.locals.role.permissions.includes("articles_edit")) {
+        const id = req.params.id;
+        const position = req.body.position;
+    
+        await Article.updateOne({
+            _id: id
+        }, {
+            position: position
+        });
 
-    req.flash('success', 'Thay đổi vị trí thành công!');
-  
-    res.json({
-        code: 200
-    });
+        req.flash('success', 'Thay đổi vị trí thành công!');
+    
+        res.json({
+            code: 200
+        });
+    } else {
+        res.send(`403`);
+    }
 }
 
 
@@ -183,25 +199,29 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/articles/createPost
 module.exports.createPost = async (req, res) => {
-    if (req.body.position) {
-        req.body.position = parseInt(req.body.position);
+    if(res.locals.role.permissions.includes("articles_create")) {
+        if (req.body.position) {
+            req.body.position = parseInt(req.body.position);
+        } else {
+            const countArticles = await Article.countDocuments({});
+            req.body.position = countArticles + 1;
+        }
+    
+        req.body.deleted = req.body.deleted === 'true'; // Chuyển đổi deleted từ chuỗi thành boolean
+    
+        const newArticle = new Article(req.body);
+        await newArticle.save();
+    
+        req.flash("success", "Tạo mới bài viết thành công!");
+    
+        res.redirect(`/${systemConfig.prefixAdmin}/articles`);
     } else {
-        const countArticles = await Article.countDocuments({});
-        req.body.position = countArticles + 1;
+        res.send(`403`);
     }
-
-    req.body.deleted = req.body.deleted === 'true'; // Chuyển đổi deleted từ chuỗi thành boolean
-
-    const newArticle = new Article(req.body);
-    await newArticle.save();
-
-    req.flash("success", "Tạo mới bài viết thành công!");
-
-    res.redirect(`/${systemConfig.prefixAdmin}/articles`);
 }
 
 
-// [GET] /admin/products/edit/:id
+// [GET] /admin/articles/edit/:id
 module.exports.edit = async (req, res) => {
     try {
       const id = req.params.id;
@@ -212,16 +232,16 @@ module.exports.edit = async (req, res) => {
       });
   
       if (article) {
-        // const categories = await ProductCategory.find({
-        //   deleted: false
-        // });
+        const categories = await ArticleCategory.find({
+          deleted: false
+        });
   
-        // const newCategories = createTreeHelper(categories);
+        const newCategories = createTreeHelper(categories);
   
         res.render("admin/pages/articles/edit", {
           pageTitle: "Chỉnh sửa sản phẩm",
           article: article,
-        //   categories: newCategories
+          categories: newCategories
         });
       } else {
         res.redirect(`/${systemConfig.prefixAdmin}/articles`);
@@ -232,30 +252,34 @@ module.exports.edit = async (req, res) => {
   }
   
   
-  // [PATCH] /admin/products/edit/:id
+  // [PATCH] /admin/articles/edit/:id
   module.exports.editPatch  = async (req, res) => {
-      try {
-        const id = req.params.id;
+    if(res.locals.role.permissions.includes("articles_edit")) {
+        try {
+            const id = req.params.id;
+        
     
-
-        if (req.body.position) {
-            req.body.position = parseInt(req.body.position);
-        } else {
-            const countArticles = await Article.countDocuments({});
-            req.body.position = countArticles + 1;
-        }
-
-        await Article.updateOne({
-          _id: id,
-          deleted: false
-        }, req.body);
+            if (req.body.position) {
+                req.body.position = parseInt(req.body.position);
+            } else {
+                const countArticles = await Article.countDocuments({});
+                req.body.position = countArticles + 1;
+            }
     
-        req.flash("success", "Cập nhật bài viết thành công!");
-    
-      } catch(error) {
+            await Article.updateOne({
+              _id: id,
+              deleted: false
+            }, req.body);
+        
+            req.flash("success", "Cập nhật bài viết thành công!");
+        
+        } catch(error) {
         req.flash('error', 'Id bài viết không hợp lệ!');
-      }
-      res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+        }
+        res.redirect(`/${systemConfig.prefixAdmin}/articles`);
+    } else {
+        res.send(`403`);
+    }
 }
   
   

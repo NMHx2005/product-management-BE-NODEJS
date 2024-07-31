@@ -1,90 +1,91 @@
 extends ../../layouts/default.pug
 
 block main
-  h1(class="mb-4") #{pageTitle}
+  if(role.permissions.includes("articles_edit"))
+    h1(class="mb-4") #{pageTitle}
 
-  form(
-    action=`/${prefixAdmin}/articles/edit/${article.id}?_method=PATCH`
-    method="POST"
-    enctype="multipart/form-data"
-  )
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        value=article.title
-        required
-      )
-    div(class="form-group")
-      label(for="content") Nội dung
-      textarea(
-        class="form-control"
-        id="content"
-        name="content"
-        rows="5"
-        textarea-mce
-      ) #{article.content}
-    div(
-        class="form-group"
-        upload-image
+    form(
+      action=`/${prefixAdmin}/articles/edit/${article.id}?_method=PATCH`
+      method="POST"
+      enctype="multipart/form-data"
     )
-        label(for="thumbnail") Ảnh
+      div(class="form-group")
+        label(for="title") Tiêu đề
         input(
-            type="file"
-            class="form-control-file"
-            id="thumbnail"
-            name="thumbnail"
-            accept="image/*"
-            upload-image-input
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          value=article.title
+          required
         )
-        if article.thumbnail
-            img(
-                src=article.thumbnail
-                class="image-preview"
-                upload-image-preview
-            )
-        else 
-            img(
-                src=""
-                class="image-preview"
-                upload-image-preview
-            )
-    div(class="form-group")
-      label(for="position") Vị trí
-      input(
-        type="number"
-        class="form-control"
-        id="position"
-        name="position"
-        value=article.position
-        min="1"
+      div(class="form-group")
+        label(for="content") Nội dung
+        textarea(
+          class="form-control"
+          id="content"
+          name="content"
+          rows="5"
+          textarea-mce
+        ) #{article.content}
+      div(
+          class="form-group"
+          upload-image
       )
-    div(class="form-group form-check form-check-inline")
+          label(for="thumbnail") Ảnh
+          input(
+              type="file"
+              class="form-control-file"
+              id="thumbnail"
+              name="thumbnail"
+              accept="image/*"
+              upload-image-input
+          )
+          if article.thumbnail
+              img(
+                  src=article.thumbnail
+                  class="image-preview"
+                  upload-image-preview
+              )
+          else 
+              img(
+                  src=""
+                  class="image-preview"
+                  upload-image-preview
+              )
+      div(class="form-group")
+        label(for="position") Vị trí
         input(
-            type="radio"
-            class="form-check-input"
-            id="statusActive"
-            name="status"
-            value="active"
-            checked=(article.status == "active" ? true : false)
+          type="number"
+          class="form-control"
+          id="position"
+          name="position"
+          value=article.position
+          min="1"
         )
-        label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-        input(
-            type="radio"
-            class="form-check-input"
-            id="statusInActive"
-            name="status"
-            value="inactive"
-            checked=(article.status == "inactive" ? true : false)
-        )
-        label(for="statusInActive" class="form-check-label") Dừng hoạt động
-    div(class="form-group")
-        button(
-            type="submit"
-            class="btn btn-primary"
-        ) Cập nhật
+      div(class="form-group form-check form-check-inline")
+          input(
+              type="radio"
+              class="form-check-input"
+              id="statusActive"
+              name="status"
+              value="active"
+              checked=(article.status == "active" ? true : false)
+          )
+          label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+          input(
+              type="radio"
+              class="form-check-input"
+              id="statusInActive"
+              name="status"
+              value="inactive"
+              checked=(article.status == "inactive" ? true : false)
+          )
+          label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      div(class="form-group")
+          button(
+              type="submit"
+              class="btn btn-primary"
+          ) Cập nhật
        
