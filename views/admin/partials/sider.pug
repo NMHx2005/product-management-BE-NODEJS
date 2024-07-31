@@ -24,7 +24,6 @@
       if(role.permissions.includes("accounts_view"))
         li
           a(href=`/${prefixAdmin}/accounts`) Tài Khoản admin
-      li
-        a(href=`/${prefixAdmin}/auth/logout`) Đăng Xuất
-      li
-        a(href=`/${prefixAdmin}/trash`) Thùng rác
+      if(role.permissions.includes("trash_view"))
+        li
+          a(href=`/${prefixAdmin}/trash`) Thùng rác

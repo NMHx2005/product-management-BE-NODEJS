@@ -44,7 +44,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
-  if(res.local.role.permissions.includes("account_")) {
+  if(res.locals.role.permissions.includes("accounts_creat")) {
     // Mã hóa password bằng md5 npm
     req.body.password = md5(req.body.password);
   
@@ -88,9 +88,56 @@ module.exports.edit = async (req, res) => {
 }
 
 
+// [GET] /admin/accounts/editPassword/:id
+module.exports.editPassword = async (req, res) => {
+  const id = req.params.id;
+
+  const account = await Account.findOne({
+      _id: id,
+      deleted: false
+  });
+
+  const roles = await Role.find({
+      deleted: false
+  });
+
+  res.render("admin/pages/accounts/editPassword", {
+    pageTitle: "Đổi mật khẩu",
+    roles: roles,
+    account: account
+  });
+}
+
+
+// [PATCH] /admin/accounts/editPassword/:id
+module.exports.editPasswordPatch = async (req, res) => {
+  if (res.locals.role.permissions.includes("accounts_edit")) {
+    const id = req.params.id;
+
+    // Kiểm tra nếu mật khẩu không được cung cấp
+    if (req.body.password == "") {
+      delete req.body.password;
+    } else {
+      // Mã hóa mật khẩu bằng md5
+      req.body.password = md5(req.body.password);
+    }
+
+    // Cập nhật thông tin tài khoản
+    await Account.updateOne({
+      _id: id,
+      deleted: false
+    }, req.body);
+
+    req.flash("success", "Đổi mật khẩu thành công!");
+    res.redirect(`/${systemConfig.prefixAdmin}/profile`);
+  } else {
+    res.send(`403`);
+  }
+}
+
 // [PATCH] /admin/accounts/edit/:id
 module.exports.editPatch = async (req, res) => {
-  if(res.local.role.permissions.includes("account_")) {
+  if(res.locals.role.permissions.includes("accounts_edit")) {
     const id = req.params.id;
     
     if(req.body.password == "") {
@@ -115,7 +162,7 @@ module.exports.editPatch = async (req, res) => {
 
 // [PATCH] /admin/accounts/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-  if(res.local.role.permissions.includes("account_")) {
+  if(res.locals.role.permissions.includes("accounts_edit")) {
     const { id, statusChange } = req.params;
 
     await Account.updateOne({
@@ -173,7 +220,7 @@ module.exports.detail = async (req, res) => {
 
 // [PATCH] /admin/accounts/delete/:id
 module.exports.delete = async (req, res) => {
-  if(res.local.role.permissions.includes("account_delete")) {
+  if(res.locals.role.permissions.includes("accounts_delete")) {
     const id = req.params.id;
 
     await Account.updateOne({

@@ -20,6 +20,15 @@ router.post(
 
 router.get("/edit/:id", controller.edit);
 
+router.get("/editPassword/:id", controller.editPassword);
+
+router.patch(
+  "/editPassword/:id",
+  upload.single('avatar'),
+  uploadCloud.uploadSingle,
+  controller.editPasswordPatch
+);
+
 router.patch("/change-status/:statusChange/:id", controller.changeStatus);
 
 router.patch(

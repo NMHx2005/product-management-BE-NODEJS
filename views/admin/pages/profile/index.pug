@@ -1,0 +1,44 @@
+extends ../../layouts/default.pug
+
+block main
+  .container.mt-5
+    .row
+      .col-md-8.offset-md-2
+        .card.shadow
+          .card-header.bg-primary.text-white.text-center
+            h1.mb-0 Thông tin cá nhân
+          .card-body
+            .text-center
+              if (account.avatar)
+                img(src=account.avatar width="150px" class="mb-3 rounded-circle shadow-sm")
+
+            .mb-3
+              p.mb-1 Họ tên:
+              h5 #{account.fullName}
+
+            .mb-3
+              p.mb-1 Email:
+              h5 #{account.email}
+
+            .mb-3
+              p.mb-1 Số điện thoại:
+              h5 #{account.phone}
+
+            .mb-3
+              p.mb-1 Trạng thái:
+              h5
+                span.badge(
+                  class=(account.status === "active" ? "badge-success" : "badge-danger")
+                ) #{account.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+
+            .mb-3
+              p.mb-1 Phân quyền:
+              h5 #{role.title}
+
+          .card-footer.text-center
+            each item, index in records
+                    if item.email == account.email
+                        a.btn.btn-secondary.mr-2(href=`/${prefixAdmin}/accounts/editPassword/${item.id}`) Đổi mật khẩu
+                        a.btn.btn-primary(
+                            href=`/${prefixAdmin}/accounts/edit/${item.id}`
+                        ) Chỉnh sửa thông tin
