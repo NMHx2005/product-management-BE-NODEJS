@@ -15,7 +15,7 @@ block main
                             img.card-img-top(src=item.thumbnail, alt=item.title)
                         .card-body.d-flex.flex-column
                             h5.card-title.inner-title
-                                a.text-decoration-none.text-dark(href=`/products/${item.slug}`) #{item.title}
+                                a.text-decoration-none.text-dark(href=`/products/detail/${item.slug}`) #{item.title}
                             .mt-auto
                                 .inner-price-new.fs-5.fw-bold.text-danger #{item.priceNew}$
                                 if item.price != item.priceNew
