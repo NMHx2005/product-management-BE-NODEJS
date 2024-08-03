@@ -37,7 +37,7 @@ module.exports.detail = async (req, res) => {
         deleted: false,
         status: "active"
     });
-
+    
     product.priceNew = ((1 - product.discountPercentage/100) * product.price).toFixed(0);
 
     if(product) {

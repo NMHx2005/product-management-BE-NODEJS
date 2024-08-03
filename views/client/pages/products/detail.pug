@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/arlet-addCart.pug
 
 block main
   .product-detail
@@ -41,9 +42,11 @@ block main
               max=product.stock
             )
             button(
+              id="addToCartForm"
               type="submit"
               class="btn btn-success btn-block"
             ) Thêm vào giỏ hàng
+          +arlet-addCart("Thêm sản phẩm thành công")
     hr
     .container.my-5
       .row
