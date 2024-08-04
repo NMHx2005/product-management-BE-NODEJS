@@ -11,14 +11,15 @@ block main
       .col-12
         table(class="table table-bordered" cart)
           thead
-            tr
-              th STT
-              th Ảnh
-              th Tên
-              th Giá
-              th Số lượng
-              th Tổng tiền
-              th Hành động
+            if(cartDetail.products.length > 0)
+                tr
+                th STT
+                th Ảnh
+                th Tên
+                th Giá
+                th Số lượng
+                th Tổng tiền
+                th Hành động
           tbody
             if(cartDetail.products.length > 0)
               each product, index in cartDetail.products
