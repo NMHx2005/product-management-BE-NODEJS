@@ -92,7 +92,9 @@ module.exports.success = async (req, res) => {
       item.totalPrice = item.priceNew * item.quantity;
       totalPrice += item.totalPrice;
     }
-  
+
+    req.flash("success", "Đặt hàng thành công");
+
     res.render("client/pages/checkout/success", {
       pageTitle: "Đặt hàng thành công",
       order: order,

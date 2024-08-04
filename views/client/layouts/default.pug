@@ -1,3 +1,5 @@
+include ../mixins/alert.pug
+
 doctype html
 html
     head
@@ -8,7 +10,11 @@ html
     body
         include ../partials/header.pug
 
+
         block main
+
+        +alert-error(5000)
+        +alert-success(3000)
 
         include ../partials/footer.pug
 
