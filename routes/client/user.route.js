@@ -17,6 +17,8 @@ router.post("/password/forgot", controller.forgotPasswordPost);
 
 router.post("/login", controller.loginPost);
 
+router.get("/profile", controller.profile);
+
 router.get("/password/otp", controller.otpPassword);
 
 router.patch("/password/reset", controller.resetPasswordPatch);

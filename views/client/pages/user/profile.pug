@@ -1,0 +1,17 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-5
+    .row.justify-content-center
+      .col-lg-6.col-md-8.col-sm-10
+        .card.shadow-sm
+          .card-header
+            +box-head("Thông tin tài khoản")
+          .card-body
+            .mb-3
+              h5.card-title Tên người dùng
+              p.card-text #{user.fullName}
+            .mb-3
+              h5.card-title Email
+              p.card-text #{user.email}
