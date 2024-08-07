@@ -67,6 +67,16 @@ app.use(express.static(`${__dirname}/public`));
 // Tạo biến toàn cục cho file pug
 
 
+
+
+// Tạo cái này khi truy cập vào các đường link không tồn tại
+app.get("*", (req, res) => {
+    res.render("client/pages/errors/404", {
+      pageTitle: "404 Not Found"
+    });
+});
+
+
 //  Gọi phương thức index() từ module route client đã import, truyền vào instance của Express (app) để định nghĩa các route cho client.
 routeClient.index(app);
 routeAdmin.index(app);
