@@ -68,6 +68,10 @@ app.use(express.static(`${__dirname}/public`));
 
 
 
+//  Gọi phương thức index() từ module route client đã import, truyền vào instance của Express (app) để định nghĩa các route cho client.
+routeClient.index(app);
+routeAdmin.index(app);
+
 
 // Tạo cái này khi truy cập vào các đường link không tồn tại
 app.get("*", (req, res) => {
@@ -77,9 +81,6 @@ app.get("*", (req, res) => {
 });
 
 
-//  Gọi phương thức index() từ module route client đã import, truyền vào instance của Express (app) để định nghĩa các route cho client.
-routeClient.index(app);
-routeAdmin.index(app);
 
 // App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
