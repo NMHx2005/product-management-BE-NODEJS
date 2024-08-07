@@ -1,18 +1,36 @@
 extends ../../layouts/default.pug
 
 block main
-  h1 Trang tổng quan
-  if(account.fullName)
-    h2 Tên tài khoản: #{account.fullName}
-  if(account.phone)
-    div Liên hệ: #{account.phone}
-  if(account.email)
-    div Email: #{account.email}
-  img(
-    src=account.avatar
-    width="150px"
-  )
-
-  h2 Vai trò: #{role.title}
-  div #{role.permissions}
-  
+  .container.my-5
+    .row.justify-content-center
+      .col-lg-8.col-md-10.col-sm-12
+        .card.shadow-sm
+          .card-body
+            h1.card-title Trang tổng quan
+            if(account.avatar)
+              .text-center.mb-4
+                img(
+                  src=account.avatar
+                  class="rounded-circle img-thumbnail"
+                  width="150px"
+                  height="150px"
+                  alt="Avatar"
+                )
+            if(account.fullName)
+              .mb-3
+                h2 Tên tài khoản
+                p.card-text #{account.fullName}
+            if(account.phone)
+              .mb-3
+                h2 Liên hệ
+                p.card-text #{account.phone}
+            if(account.email)
+              .mb-3
+                h2 Email
+                p.card-text #{account.email}
+            .mb-3
+              h2 Vai trò
+              p.card-text #{role.title}
+            .mb-3
+              h2 Quyền hạn
+              p.card-text #{role.permissions}
