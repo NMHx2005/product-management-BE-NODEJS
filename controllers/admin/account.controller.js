@@ -44,7 +44,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
-  if(res.locals.role.permissions.includes("accounts_creat")) {
+  if(res.locals.role.permissions.includes("accounts_create")) {
     // Mã hóa password bằng md5 npm
     req.body.password = md5(req.body.password);
   
