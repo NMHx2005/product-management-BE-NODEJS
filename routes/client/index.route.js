@@ -29,5 +29,9 @@ module.exports.index = (app) => {
 
     app.use("/checkout", checkoutRoute);
     
-    app.use("/chat", chatRoute);
+    app.use(
+        "/chat",
+        userMiddleware.requireAuth,
+        chatRoute
+    ); 
 }
