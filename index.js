@@ -28,10 +28,27 @@ const routeClient = require("./routes/client/index.route");
 const routeAdmin = require("./routes/admin/index.route");
 const systemConfig = require("./config/system");
 const path = require('path');
+
+const http = require('http');
+const { Server } = require("socket.io");
+
+
 // Khởi tạo một instance của Express và gán vào biến app.
 const app = express();
 // Lấy giá trị của biến môi trường PORT và gán vào biến port. Nếu không có giá trị nào được set, server sẽ lắng nghe ở cổng được định nghĩa bởi hằng số PORT (3000).
 const port = process.env.PORT;
+
+
+// SocketIO
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+  console.log("Có 1 người dùng kết nối", socket.id);
+});
+// End SocketIO
+
+
 
 
 app.use(methodOverride('_method'));
@@ -86,6 +103,6 @@ app.get("*", (req, res) => {
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // Khởi động server và lắng nghe ở cổng được chỉ định bởi biến port. Khi server bắt đầu lắng nghe, nó sẽ in ra thông báo "Example app listening at http://localhost
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 });
