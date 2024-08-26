@@ -118,6 +118,8 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   body.insertBefore(div, elementListTyping);
 
   body.scrollTop = body.scrollHeight;
+
+  new Viewer(div);
 });
 // End SERVER_RETURN_MESSAGE
 
@@ -151,3 +153,9 @@ if(buttonIcon) {
   });
 }
 // End Show Popup Icon
+
+// Preview Image
+if(bodyChat) {
+  new Viewer(bodyChat);
+}
+// End Preview Image
