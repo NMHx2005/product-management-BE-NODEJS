@@ -3,6 +3,7 @@ const productRoute = require("./product.route");
 const searchRoute = require("./search.route");
 const checkoutRoute = require("./checkout.route");
 const cartRoute = require("./cart.route");
+const usersRoute = require("./users.route");
 const userRoute = require("./user.route");
 const chatRoute = require("./chat.route");
 
@@ -34,4 +35,10 @@ module.exports.index = (app) => {
         userMiddleware.requireAuth,
         chatRoute
     ); 
+
+    app.use(
+        "/users",
+        userMiddleware.requireAuth,
+        usersRoute
+    );
 }
