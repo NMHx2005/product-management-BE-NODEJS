@@ -1,3 +1,5 @@
+var socket = io();
+
 // Hiển thị thông báo 1.5 giây
 const button = document.querySelector("#addToCartForm");
 const arletAddCart = document.querySelector(".arlet-addCart");
