@@ -5,14 +5,12 @@ html
     head
         title #{pageTitle}
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet")
-        link( rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" )
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css")
         link(rel="stylesheet", href="https://unpkg.com/file-upload-with-preview/dist/style.css")
         link(rel="stylesheet", href="/css/style.css")
     body
         include ../partials/header.pug
-
 
         block main
 
@@ -21,13 +19,20 @@ html
 
         include ../partials/footer.pug
 
+        // Tải các thư viện JavaScript theo thứ tự đúng
         script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
         script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js") 
         script(type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js") 
-        script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js") 
+
+        // Tải thư viện FileUploadWithPreview trước khi sử dụng
+        script(src="https://unpkg.com/file-upload-with-preview/dist/file-upload-with-preview.iife.js")
+
+        // Các thư viện và script khác được tải sau
         script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11") 
         script(src="/socket.io/socket.io.js")
         script(src="/js/script.js")
+        
+        // Tải script module sau khi các thư viện đã sẵn sàng
         script(type="module" src="/js/chat.js")
         script(type="module" src="/js/users.js")

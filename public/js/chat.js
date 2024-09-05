@@ -47,27 +47,39 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
 
 // CLIENT_SEND_MESSAGE
 const formChat = document.querySelector(".chat .inner-form");
-if(formChat) {
-  const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
-    multiple: true,
-    maxFileCount: 6
-  });
+if (formChat) {
+  // Kiểm tra xem thư viện FileUploadWithPreview đã tồn tại chưa
+  if (typeof FileUploadWithPreview !== "undefined") {
+    const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
+      multiple: true,
+      maxFileCount: 6
+    });
+    
+    formChat.addEventListener("submit", (event) => {
+      event.preventDefault();
 
-  formChat.addEventListener("submit", (event) => {
-    event.preventDefault();
+      const content = event.target.content.value.trim() || "";
+      const images = upload.cachedFileArray;
 
-    const content = event.target.content.value || "";
-    const images = upload.cachedFileArray;
-    if(content || images.length > 0) {
-      socket.emit("CLIENT_SEND_MESSAGE", {
-        content: content,
-        images: images
-      });
-      event.target.content.value = "";
-      upload.resetPreviewPanel();
-      socket.emit("CLIENT_SEND_TYPING", "hidden");
-    }
-  })
+      if (content || images.length > 0) {
+        if (typeof socket !== "undefined" && socket.connected) {
+          socket.emit("CLIENT_SEND_MESSAGE", {
+            content: content,
+            images: images
+          });
+          event.target.content.value = ""; // Clear input field
+          upload.resetPreviewPanel(); // Reset file preview panel
+          socket.emit("CLIENT_SEND_TYPING", "hidden"); // Hide typing status
+        } else {
+          console.error("Socket is not connected.");
+        }
+      } else {
+        alert("Please enter some content or upload images before sending.");
+      }
+    });
+  } else {
+    console.error("FileUploadWithPreview library is not available.");
+  }
 }
 // End CLIENT_SEND_MESSAGE
 
