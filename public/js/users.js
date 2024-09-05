@@ -30,12 +30,34 @@ if (btnCancelFriend.length > 0) {
 }
 // Hết Chức năng hủy gửi yêu cầu
 
-// Hết Chức năng hủy gửi yêu cầu
-
 // Chức năng từ chối kết bạn
+const btnRefuseFriend = document.querySelectorAll("[btn-refuse-friend]");
+if (btnRefuseFriend) {
+    btnRefuseFriend.forEach((button) => {
+        button.addEventListener("click", () => {
+            // Việc 1: Thêm class "refuse" cho box-user
+            button.closest(".box-user").classList.add("refuse");
 
+            // Việc 2: Gửi lên server userIdB
+            const userIdB = button.getAttribute("btn-refuse-friend");
+            socket.emit("CLIENT_REFUSE_FRIEND", userIdB);
+        });
+    })
+}
 // Hết Chức năng từ chối kết bạn
 
 // Chức năng chấp nhận kết bạn
+const listBtnAcceptFriend = document.querySelectorAll("[btn-accept-friend]");
+if(listBtnAcceptFriend.length > 0) {
+  listBtnAcceptFriend.forEach(button => {
+    button.addEventListener("click", () => {
+      // Việc 1: Thêm class "accepted" cho box-user
+      button.closest(".box-user").classList.add("accepted");
 
+      // Việc 2: Gửi lên server userIdB
+      const userIdB = button.getAttribute("btn-accept-friend");
+      socket.emit("CLIENT_ACCEPT_FRIEND", userIdB);
+    })
+  })
+}
 // Hết Chức năng chấp nhận kết bạn
