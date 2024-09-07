@@ -69,4 +69,5 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
         badgeUsersAccept.innerHTML = data.length;
     }
 });
+
 // End SERVER_RETURN_LENGTH_ACCEPT_FRIEND
