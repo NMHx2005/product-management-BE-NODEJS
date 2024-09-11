@@ -166,70 +166,77 @@ module.exports = (req, res) => {
                     typeRoom: "friend",
                     users: [
                         {
-                            userId: userIdA,
+                            userId: userIdA,  // Đảm bảo userIdA được định nghĩa đúng
                             role: "supperAdmin"
                         },
                         {
-                            userIdB: userIdB,
+                            userId: userIdB,  // Đảm bảo userIdB được định nghĩa đúng
                             role: "supperAdmin"
                         }
                     ]
                 });
-
-                await roomChat.save();
-
+        
+                await roomChat.save();  // Lưu phòng chat vào database
+        
                 // Thêm {userId, roomChatId} của B vào friendsList của A
                 // Xóa id của B trong acceptFriends của A
                 const existUserBInA = await User.findOne({
                     _id: userIdA,
                     acceptFriends: userIdB
                 });
-    
-                if(existUserBInA) {
-                    await User.updateOne({
-                    _id: userIdA
+        
+                if (existUserBInA) {
+                    const resultA = await User.updateOne({
+                        _id: userIdA
                     }, {
                         $push: {
                             friendsList: {
-                              userId: userIdB,
-                              roomChatId: roomChat.id
+                                userId: userIdB,
+                                roomChatId: roomChat.id
                             }
-                          },
-                          $pull: {
+                        },
+                        $pull: {
                             acceptFriends: userIdB
                         }
                     });
+        
+                    if (resultA.nModified === 0) {
+                        throw new Error("Cập nhật friendsList cho user A không thành công.");
+                    }
                 }
-
-
-
-
+        
                 // Thêm {userId, roomChatId} của A vào friendsList của B
                 // Xóa id của A trong requestFriends của B
                 const existUserAInB = await User.findOne({
                     _id: userIdB,
                     requestFriends: userIdA
                 });
-
-                if(existUserAInB) {
-                    await User.updateOne({
-                      _id: userIdB
+        
+                if (existUserAInB) {
+                    const resultB = await User.updateOne({
+                        _id: userIdB
                     }, {
-                      $push: {
-                        friendsList: {
-                          userId: userIdA,
-                          roomChatId: roomChat.id
+                        $push: {
+                            friendsList: {
+                                userId: userIdA,
+                                roomChatId: roomChat.id
+                            }
+                        },
+                        $pull: {
+                            requestFriends: userIdA
                         }
-                      },
-                      $pull: {
-                        requestFriends: userIdA
-                      }
                     });
+        
+                    if (resultB.nModified === 0) {
+                        throw new Error("Cập nhật friendsList cho user B không thành công.");
+                    }
                 }
+        
             } catch (error) {
-                console.log(error);
+                console.error("Error updating friend list:", error);
             }
-        })
+        });
+
         // Hết Chức năng chấp nhận kết bạn
     });
 }

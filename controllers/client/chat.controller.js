@@ -3,14 +3,18 @@ const User = require("../../model/user.model");
 const streamUpload = require("../../helpers/streamUpload.helper");
 const chatSocket = require("../../sockets/client/chat.socket");
 
-// [GET] /chat/
+// [GET] /chat/:roomChatId
 module.exports.index = async (req, res) => {
 
     // SocketIO
     chatSocket(req, res);
     // End SocketIO
 
-    const chats = await Chat.find({});
+    const roomChatId = req.params.roomChatId;
+
+    const chats = await Chat.find({
+        roomChatId: roomChatId
+    });
 
     for (const chat of chats) {
         const infoUser = await User.findOne({
