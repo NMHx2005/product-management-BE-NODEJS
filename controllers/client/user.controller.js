@@ -28,7 +28,8 @@ module.exports.registerPost = async (req, res) => {
       fullName: req.body.fullName,
       email: req.body.email,
       password: md5(req.body.password),
-      tokenUser: generateHelper.generateRandomString(30)
+      tokenUser: generateHelper.generateRandomString(30),
+      statusOnline: "online"
     };
   
     const user = new User(userData);

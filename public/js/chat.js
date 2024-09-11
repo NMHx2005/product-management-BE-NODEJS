@@ -73,12 +73,8 @@ if (formChat) {
         } else {
           console.error("Socket is not connected.");
         }
-      } else {
-        alert("Please enter some content or upload images before sending.");
       }
     });
-  } else {
-    console.error("FileUploadWithPreview library is not available.");
   }
 }
 // End CLIENT_SEND_MESSAGE
