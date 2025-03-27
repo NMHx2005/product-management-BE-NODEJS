@@ -1,45 +1,45 @@
 // Button status
 const listButtonStatus = document.querySelectorAll("[button-status]");
 if (listButtonStatus.length > 0) {
-    // Lấy ra link của trang hiện tại
-    let url = new URL(window.location.href);
+  // Lấy ra link của trang hiện tại
+  let url = new URL(window.location.href);
 
-    // Bắt sự kiện khi click vào các trạng thái
-    listButtonStatus.forEach(button => {
-        button.addEventListener("click", () => {
-            // Lấy ra trạng thái hiện tại của button
-            const status = button.getAttribute("button-status");
+  // Bắt sự kiện khi click vào các trạng thái
+  listButtonStatus.forEach(button => {
+    button.addEventListener("click", () => {
+      // Lấy ra trạng thái hiện tại của button
+      const status = button.getAttribute("button-status");
 
-            // Nếu button là trạng thái hoạt hoặc dừng thì vào đây
-            if (status) {
-                url.searchParams.set("status", status);
-            } else {
-                // Nếu button ở trang thái tất cả
-                url.searchParams.delete("status");
-            }
+      // Nếu button là trạng thái hoạt hoặc dừng thì vào đây
+      if (status) {
+        url.searchParams.set("status", status);
+      } else {
+        // Nếu button ở trang thái tất cả
+        url.searchParams.delete("status");
+      }
 
-            // Cập nhật lại url cho trang web
-            window.location.href = url.href;
-        });
+      // Cập nhật lại url cho trang web
+      window.location.href = url.href;
     });
+  });
 
-    // Thêm class active mặc định
+  // Thêm class active mặc định
 
-    // Lấy ra xem url hiện tại status đang ở trạng thái nào
-    const statusCurrent = url.searchParams.get("status") || "";
-    // Tìm button có trạng thái statusCurrent
-    const buttonCurrent = document.querySelector(`[button-status="${statusCurrent}"]`);
-    // Nếu tìm thấy button thì thêm class active vào button đó
-    if(buttonCurrent) {
-        buttonCurrent.classList.add("active");
-    }
+  // Lấy ra xem url hiện tại status đang ở trạng thái nào
+  const statusCurrent = url.searchParams.get("status") || "";
+  // Tìm button có trạng thái statusCurrent
+  const buttonCurrent = document.querySelector(`[button-status="${statusCurrent}"]`);
+  // Nếu tìm thấy button thì thêm class active vào button đó
+  if (buttonCurrent) {
+    buttonCurrent.classList.add("active");
+  }
 }
 // End Button status 
 
 
 // From search
 const formSearch = document.querySelector("[form-search]");
-if(formSearch) {
+if (formSearch) {
   let url = new URL(window.location.href);
 
   formSearch.addEventListener("submit", (event) => {
@@ -47,7 +47,7 @@ if(formSearch) {
 
     const keyword = event.target.elements.keyword.value;
 
-    if(keyword) {
+    if (keyword) {
       url.searchParams.set("keyword", keyword);
     } else {
       url.searchParams.delete("keyword");
@@ -63,7 +63,7 @@ if(formSearch) {
 
 // Pagination
 const listButtonPagination = document.querySelectorAll("[button-pagination]");
-if(listButtonPagination.length > 0) {
+if (listButtonPagination.length > 0) {
   let url = new URL(window.location.href);
 
   listButtonPagination.forEach(button => {
@@ -83,7 +83,7 @@ if(listButtonPagination.length > 0) {
 
 // Button Change Status
 const buttonChangeStatus = document.querySelectorAll("[button-change-status]");
-if(buttonChangeStatus.length > 0) {
+if (buttonChangeStatus.length > 0) {
   buttonChangeStatus.forEach(button => {
     button.addEventListener("click", () => {
       const link = button.getAttribute("link");
@@ -127,7 +127,7 @@ if (inputCheckAll) {
     inputCheckItem.addEventListener("click", () => {
       const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItem']:checked");
 
-      if(listInputCheckItemChecked.length == listInputCheckItem.length) {
+      if (listInputCheckItemChecked.length == listInputCheckItem.length) {
         inputCheckAll.checked = true;
       } else {
         inputCheckAll.checked = false;
@@ -154,9 +154,9 @@ if (boxActions) {
 
     const listInputChecked = document.querySelectorAll("input[name='checkItem']:checked");
 
-   
+
     const ids = [];
-    listInputChecked .forEach(input => {
+    listInputChecked.forEach(input => {
       ids.push(input.value);
     });
 
@@ -196,7 +196,7 @@ if (listButtonDelete.length > 0) {
   listButtonDelete.forEach(button => {
     button.addEventListener("click", () => {
       const link = button.getAttribute("button-delete");
-      fetch(link , {
+      fetch(link, {
         method: "PATCH"
       })
         .then(res => res.json())
@@ -213,7 +213,7 @@ if (listButtonDelete.length > 0) {
 
 // Đi sang trang trash
 const pagesTrash = document.querySelector(".icon-trash");
-if(pagesTrash) {
+if (pagesTrash) {
   pagesTrash.addEventListener("click", () => {
     const link = pagesTrash.getAttribute("link");
 
@@ -238,8 +238,8 @@ if (listInputPosition.length > 0) {
         },
         body: JSON.stringify({ position: position }),
       })
-       .then(res => res.json())
-       .then(data => {
+        .then(res => res.json())
+        .then(data => {
           console.log(data);
         });
 
@@ -251,7 +251,7 @@ if (listInputPosition.length > 0) {
 
 // show-alert
 const showAlert = document.querySelector("[show-alert]");
-if(showAlert) {
+if (showAlert) {
   let time = showAlert.getAttribute("show-alert") || 3000;
   time = parseInt(time);
 
@@ -270,7 +270,7 @@ if (uploadImage) {
 
   uploadImageInput.addEventListener("change", () => {
     const file = uploadImageInput.files[0];
-    
+
     if (file) {
       uploadImagePreview.src = URL.createObjectURL(file);
     }
@@ -289,11 +289,11 @@ if (sort) {
 
   const select = sort.querySelector("[sort-select]");
   select.addEventListener("change", () => {
-    const [ sortKey, sortValue] = select.value.split("-");
+    const [sortKey, sortValue] = select.value.split("-");
 
-    url.searchParams.set("sortKey", sortKey); 
+    url.searchParams.set("sortKey", sortKey);
     url.searchParams.set("sortValue", sortValue);
-    
+
     window.location.href = url.href;
   });
 
@@ -314,7 +314,7 @@ if (sort) {
     clearSort.addEventListener("click", () => {
       url.searchParams.delete("sortKey");
       url.searchParams.delete("sortValue");
-      
+
       window.location.href = url.href;
     });
   }
@@ -327,7 +327,7 @@ if (sort) {
 
 // Phân quyền
 const tablePermissions = document.querySelector("[table-permissions]");
-if(tablePermissions) {
+if (tablePermissions) {
   const buttonSubmit = document.querySelector("[button-submit]");
   buttonSubmit.addEventListener("click", () => {
     const roles = [];
@@ -361,7 +361,7 @@ if(tablePermissions) {
     })
       .then(res => res.json())
       .then(data => {
-        if(data.code == 200) {
+        if (data.code == 200) {
           Swal.fire({
             position: "center",
             icon: "success",

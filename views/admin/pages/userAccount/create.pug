@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+
+block main
+    .container
+        .row
+            .col-md-8.offset-md-2
+                h2 Tạo Người Dùng Mới
+                form(
+                    action=`/${prefixAdmin}/userAccount/create`
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="myForm"
+                )
+                    .mb-3
+                        label(for="fullName") Họ và Tên:
+                        input(type="text", class="form-control", id="fullName", name="fullName", required)
+
+                    .mb-3
+                        label(for="email") Email:
+                        input(type="email", class="form-control", id="email", name="email", required)
+
+                    .mb-3
+                        label(for="phone") Số Điện Thoại:
+                        input(type="text", class="form-control", id="phone", name="phone")
+
+                    .mb-3
+                        label(for="password") Mật Khẩu:
+                        input(type="password", class="form-control", id="password", name="password", required)
+
+                    .mb-3
+                        div(
+                            class="form-group"
+                            upload-image
+                        )
+                            label(for="thumbnail") Ảnh
+                            input(
+                                type="file"
+                                class="form-control-file"
+                                id="thumbnail"
+                                name="thumbnail"
+                                accept="image/*"
+                                upload-image-input
+                            )
+                            img(
+                                src=""
+                                class="image-preview"
+                                upload-image-preview
+                            )
+                    .mb-3
+                        label(for="status") Trạng Thái:
+                        select(class="form-select", id="status", name="status")
+                            option(value="active") Hoạt động
+                            option(value="inactive") Dừng hoạt động
+
+                    button(type="submit", class="btn btn-primary") Tạo Người Dùng
